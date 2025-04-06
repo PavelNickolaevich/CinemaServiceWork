@@ -1,0 +1,89 @@
+﻿<Page x:Class="CinemaServiceWork.Pages.Menu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:CinemaServiceWork.Pages"
+      mc:Ignorable="d"
+      d:DesignHeight="520"
+      d:DesignWidth="200"
+      Title="Menu">
+    <Border CornerRadius="10"
+            Margin="10, 0, 0, 0">
+
+        <Border.Background>
+            <ImageBrush ImageSource="/Images/Universe_VHS.jpg" />
+        </Border.Background>
+
+        <Border CornerRadius="10"
+                Opacity="1">
+            <Grid>
+                <!-- Определяем строки для кнопок -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+
+                </Grid.RowDefinitions>
+
+                <Button Content="Моя страница"
+                        x:Name="myPageBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="0"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30" />
+
+                <Button Content="Избранное"
+                        x:Name="favoritesBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="1"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="favoritesBtn_Click" />
+
+
+                <Button Content="Форум"
+                        x:Name="forumBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="2"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30" />
+
+
+                <Button Content="Добавить фильм"
+                        x:Name="AddFilmBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="3"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="AddFilmBtn_Click" />
+
+
+                <Button Content="Выход"
+                        x:Name="exitBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="8"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="ExitBtn_Click" />
+            </Grid>
+        </Border>
+    </Border>
+</Page>
