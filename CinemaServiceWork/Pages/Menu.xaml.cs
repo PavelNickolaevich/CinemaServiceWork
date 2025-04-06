@@ -44,5 +44,10 @@ namespace CinemaServiceWork.Pages
         {
             AppFrame.contentFrame.Navigate(new Pages.NewFilmPage());
         }
+
+        private void AddActorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.contentFrame.Navigate(new Pages.NewActorPage());
+        }
     }
 }

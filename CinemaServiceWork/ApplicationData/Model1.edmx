@@ -80,7 +80,6 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           </Key>
           <Property Name="GenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsSelected" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Movies">
           <Key>
@@ -509,7 +508,6 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           </Key>
           <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IsSelected" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Genres1" Relationship="Self.FK_Genres_Genres" FromRole="Genres" ToRole="Genres1" />
           <NavigationProperty Name="Genres2" Relationship="Self.FK_Genres_Genres" FromRole="Genres1" ToRole="Genres" />
           <NavigationProperty Name="MoviesGenres" Relationship="Self.FK_MoviesGenres_Genres" FromRole="Genres" ToRole="MoviesGenres" />
@@ -950,7 +948,6 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
               <MappingFragment StoreEntitySet="Genres">
                 <ScalarProperty Name="GenreID" ColumnName="GenreID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IsSelected" ColumnName="IsSelected" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

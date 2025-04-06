@@ -184,6 +184,62 @@
             </Setter>
         </Style>
 
+        <Style x:Key="addTextBox"
+               TargetType="TextBox">
+            <Setter Property="BorderThickness"
+                    Value="3" />
+            <Setter Property="FontSize"
+                    Value="10" />
+            <Setter Property="Padding"
+                    Value="10" />
+            <Setter Property="Margin"
+                    Value="0 10" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Background"
+                    Value="#f5f7f9" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="BorderBrush"
+                    Value="#f5f7f9" />
+            <Setter Property="Opacity"
+                    Value="0.75" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Border x:Name="border"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="addTextBlock"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="#FF3F3B3B" />
+            <Setter Property="FontSize"
+                    Value="10" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="Margin"
+                    Value="0 10 10 10" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+        </Style>
+
 
 
     </Application.Resources>

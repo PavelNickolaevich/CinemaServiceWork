@@ -22,7 +22,6 @@ namespace CinemaServiceWork.ApplicationData
     
         public int GenreID { get; set; }
         public string Name { get; set; }
-        public bool IsSelected { get; set; }
     
         public virtual Genres Genres1 { get; set; }
         public virtual Genres Genres2 { get; set; }

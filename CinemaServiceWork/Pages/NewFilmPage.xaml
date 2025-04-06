@@ -5,12 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CinemaServiceWork.Pages"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
+      d:DesignHeight="520"
+      d:DesignWidth="600"
       Title="NewFilmPage">
 
-    <Border CornerRadius="12">
-
+    <Border CornerRadius="10"
+            Margin="10, 0 10, 0">
         <Border.Background>
             <ImageBrush ImageSource="/Images/Universe_VHS.jpg" />
         </Border.Background>
@@ -40,78 +40,147 @@
                 </LinearGradientBrush>
             </Border.Background>
 
+            <!-- Добавлен ScrollViewer здесь -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <Grid HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="10">
 
-            <Grid HorizontalAlignment="Center"
-                  VerticalAlignment="Center">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" />
-                    <ColumnDefinition Width="400" />
-                    <ColumnDefinition Width="40" />
-                    <ColumnDefinition Width="40" />
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0"
-                           Text="Название фильма"
-                           Style="{StaticResource regTextBlock}" />
-                <TextBlock Grid.Row="1"
-                           Text="Описание фильма"
-                           Style="{StaticResource regTextBlock}" />
-                <TextBlock Grid.Row="2"
-                           Text="Жанр"
-                           Style="{StaticResource regTextBlock}" />
-
-
-
-
-
-                <TextBox x:Name="txtName"
-                         Grid.Row="0"
-                         Grid.Column="1"
-                         Style="{StaticResource regTextBox}" />
-                <TextBox x:Name="txtSurname"
-                         Grid.Row="1"
-                         Grid.Column="1"
-                         Style="{StaticResource regTextBox}" />
-
-                <ComboBox Grid.Row="2"
-                          Grid.Column="1"
-                          x:Name="genreBox"
-                          IsEditable="True"
-                          StaysOpenOnEdit="True"
-                          HorizontalContentAlignment="Stretch"
-                          SelectionChanged="genreBox_SelectionChanged">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Content="{Binding Name}"
-                                      IsChecked="{Binding Name, Mode=TwoWay}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-
-
-                <Grid Grid.Column="1"
-                      Grid.Row="7">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="400" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="40" />
                     </Grid.ColumnDefinitions>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
+                    <TextBlock Grid.Row="0"
+                               Text="Название фильма"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="1"
+                               Text="Описание фильма"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="2"
+                               Text="Год выпуска"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="3"
+                               Text="Продолжительность"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="4"
+                               Text="Рейтинг[0...10]"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="5"
+                               Text="Жанр"
+                               Style="{StaticResource addTextBlock}" />
+                    <TextBlock Grid.Row="6"
+                               Text="Постер фильма"
+                               Style="{StaticResource addTextBlock}" />
+
+
+                    <TextBox x:Name="txtName"
+                             Grid.Row="0"
+                             Grid.Column="1"
+                             Style="{StaticResource addTextBox}" />
+                    <TextBox x:Name="txtDescription"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             Style="{StaticResource addTextBox}" />
+                    <TextBox x:Name="txtYear"
+                             Grid.Row="2"
+                             Grid.Column="1"
+                             Style="{StaticResource addTextBox}" />
+                    <TextBox x:Name="txtDuration"
+                             Grid.Row="3"
+                             Grid.Column="1"
+                             Style="{StaticResource addTextBox}" />
+                    <TextBox x:Name="txtRating"
+                             Grid.Row="4"
+                             Grid.Column="1"
+                             Style="{StaticResource addTextBox}" />
+                    <ListBox Grid.Row="5"
+                             Grid.Column="1"
+                             x:Name="listGenre"
+                             ItemsSource="{Binding Genres}"
+                             SelectionMode="Multiple"
+                             SelectionChanged="OnSelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="6"
+                                Grid.Column="1"
+                                Orientation="Horizontal">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="150" />
+                             <ColumnDefinition Width="150" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image x:Name="imgPoster"
+                                   Grid.Column="0"
+                                   Source="/Images/poster-blank.png"
+                                   Width="100"
+                                   Height="100"
+                                   Stretch="Uniform" />
+                            
+                            <Button x:Name="btnSelectImage"
+                                    Grid.Column="1"
+                                    Content="Загрузить постер"
+                                    Click="BtnSelectImage_Click"
+                                    Margin="0,5,10,0"
+                                    Height="40"
+                                    Style="{StaticResource TextHighlightButtonStyle}"
+                                    MinWidth="130"
+                                    MaxWidth="20" />
+
+                            <Button Content="Увеличить постер"
+                                    Grid.Column="2"
+                                    Click="BtnViewPoster_Click"
+                                    Margin="0,5,10,0"
+                                    Height="40"
+                                    Style="{StaticResource TextHighlightButtonStyle}"
+                                    MinWidth="130"
+                                    MaxWidth="20" />
+                        </Grid>
+
+                       
+                        <TextBlock x:Name="txtImagePath"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0,0,0" />
+                    </StackPanel>
+
+                    <Grid Grid.Column="1"
+                          Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <Button x:Name="saveBtn"
+                            Grid.Column="1"
+                            Content="Button"
+                            HorizontalAlignment="Left"
+                            Margin="200,78,0,0"
+                            Grid.Row="7"
+                            VerticalAlignment="Top"
+                            Click="saveBtn_Click" />
                 </Grid>
-            </Grid>
+            </ScrollViewer>
         </Border>
     </Border>
 </Page>

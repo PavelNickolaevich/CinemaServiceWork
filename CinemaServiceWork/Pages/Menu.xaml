@@ -73,6 +73,16 @@
                         Height="30"
                         Click="AddFilmBtn_Click" />
 
+                <Button Content="Добавить актера"
+                        x:Name="AddActorBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="4"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="AddActorBtn_Click" />
+
 
                 <Button Content="Выход"
                         x:Name="exitBtn"
