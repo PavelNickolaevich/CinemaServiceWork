@@ -40,6 +40,7 @@
                         Margin="10"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
+                        Click="MyPageFilmsBtn_Click"
                         Height="30" />
 
                 <Button Content="Избранное"
@@ -82,6 +83,16 @@
                         VerticalAlignment="Center"
                         Height="30"
                         Click="AddActorBtn_Click" />
+
+                <Button Content="Добавить режиссера"
+                        x:Name="AddDirectorBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="5"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="AddDirectorBtn_Click" />
 
 
                 <Button Content="Выход"

@@ -1,4 +1,4 @@
-﻿<Page x:Class="CinemaServiceWork.Pages.NewFilmPage"
+﻿<Page x:Class="CinemaServiceWork.Pages.NewDirectorPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       d:DesignHeight="520"
       d:DesignWidth="600"
-      Title="NewFilmPage">
+      Title="NewDirectorPage">
 
     <Border CornerRadius="10"
             Margin="10, 0 10, 0">
@@ -61,177 +61,77 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0"
-                               Text="Название фильма"
+                               Text="Имя"
                                Style="{StaticResource addTextBlock}" />
                     <TextBlock Grid.Row="1"
-                               Text="Описание фильма"
+                               Text="Фамилия"
                                Style="{StaticResource addTextBlock}" />
                     <TextBlock Grid.Row="2"
-                               Text="Год выпуска"
-                               Style="{StaticResource addTextBlock}" />
-                    <TextBlock Grid.Row="3"
-                               Text="Время"
+                               Text="Отчество"
                                Style="{StaticResource addTextBlock}" />
                     <TextBlock Grid.Row="4"
-                               Text="Рейтинг[0...10]"
+                               Text="Дата рождения"
                                Style="{StaticResource addTextBlock}" />
-                    <TextBlock Grid.Row="5"
-                               Text="Жанр"
+                    <TextBlock Grid.Row="3"
+                               Text="Страна"
                                Style="{StaticResource addTextBlock}" />
-                    <TextBlock Grid.Row="7"
-                               Text="Aктеры"
-                               Style="{StaticResource addTextBlock}" />
-                    <TextBlock Grid.Row="9"
-                               Text="Режиссер"
-                               Style="{StaticResource addTextBlock}" />
-                    <TextBlock Grid.Row="10"
-                               Text="Постер фильма"
-                               Style="{StaticResource addTextBlock}" />
+
 
 
                     <TextBox x:Name="txtName"
                              Grid.Row="0"
                              Grid.Column="1"
                              Style="{StaticResource addTextBox}" />
-                    <TextBox x:Name="txtDescription"
+                    <TextBox x:Name="txtSurname"
                              Grid.Row="1"
                              Grid.Column="1"
                              Style="{StaticResource addTextBox}" />
-                    <TextBox x:Name="txtYear"
+                    <TextBox x:Name="txtPatronymic"
                              Grid.Row="2"
                              Grid.Column="1"
                              Style="{StaticResource addTextBox}" />
-                    <TextBox x:Name="txtDuration"
-                             Grid.Row="3"
-                             Grid.Column="1"
-                             Style="{StaticResource addTextBox}" />
-                    <TextBox x:Name="txtRating"
-                             Grid.Row="4"
-                             Grid.Column="1"
-                             Style="{StaticResource addTextBox}" />
-                    <ListBox Grid.Row="5"
-                             Grid.Column="1"
-                             x:Name="listGenre"
-                             ItemsSource="{Binding Genres}"
-                             SelectionMode="Multiple"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             MaxHeight="100"
-                             Style="{StaticResource SelectListBoxItems}"
-                             SelectionChanged="OnSelectionChanged">
-                        <ListBox.ItemTemplate>
+                    <DatePicker x:Name="dateBirthPicker"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                Margin="0,10"
+                                Opacity="0.75"
+                                VerticalAlignment="Center"
+                                SelectedDateFormat="Long"
+                                IsDropDownOpen="False" />
+                    <ComboBox Grid.Row="3"
+                              Grid.Column="1"
+                              x:Name="listCountries"
+                              ItemsSource="{Binding Countries}">
+
+                        <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        
-                    </ListBox>
-                    <ListBox Grid.Row="7"
-                             Grid.Column="1"
-                             x:Name="listActors"
-                             ItemsSource="{Binding Actors}"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             MaxHeight="100"
-                             Style="{StaticResource SelectListBoxItems}"
-                             SelectionMode="Multiple">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} {1} ({2})">
-                                            <Binding Path="First_name" />
-                                            <Binding Path="Last_name" />
-                                            <Binding Path="Countries.Name" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <ListBox Grid.Row="9"
-                             Grid.Column="1"
-                             x:Name="listDirectors"
-                             ItemsSource="{Binding Directors}"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             MaxHeight="100"
-                             Style="{StaticResource SelectListBoxItems}"
-                             SelectionMode="Multiple">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} {1} ({2})">
-                                            <Binding Path="First_name" />
-                                            <Binding Path="Last_name" />
-                                            <Binding Path="Countries.Name" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    
-                    <StackPanel Grid.Row="10"
-                                Grid.Column="1"
-                                Orientation="Horizontal">
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="150" />
-                             <ColumnDefinition Width="150" />
-                            </Grid.ColumnDefinitions>
-
-                            <Image x:Name="imgPoster"
-                                   Grid.Column="0"
-                                   Source="/Images/poster-blank.png"
-                                   Width="100"
-                                   Height="100"
-                                   Stretch="Uniform" />
-                            
-                            <Button x:Name="btnSelectImage"
-                                    Grid.Column="1"
-                                    Content="Загрузить постер"
-                                    Click="BtnSelectImage_Click"
-                                    Margin="0,5,10,0"
-                                    Height="40"
-                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                    MinWidth="130"
-                                    MaxWidth="20" />
-
-                            <Button Content="Увеличить постер"
-                                    Grid.Column="2"
-                                    Click="BtnViewPoster_Click"
-                                    Margin="0,5,10,0"
-                                    Height="40"
-                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                    MinWidth="130"
-                                    MaxWidth="20" />
-                        </Grid>
-
-                       
-                        <TextBlock x:Name="txtImagePath"
-                                   VerticalAlignment="Center"
-                                   Margin="10,0,0,0" />
-                    </StackPanel>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <Grid Grid.Column="1"
-                          Grid.Row="11">
+                          Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+                          Grid.Row="6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="btnClear"
+                        <Button x:Name="btnClearDirector"
                                 BorderThickness="0"
                                 Content="Очистить"
                                 Foreground="White"
@@ -239,7 +139,7 @@
                                 FontFamily="Montserrat"
                                 Cursor="Hand"
                                 Margin="0,10,0,0"
-                                Click="btnClear_Click">
+                                Click="btnClearDirector_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background"
@@ -266,16 +166,16 @@
                             </Button.Template>
                         </Button>
 
-                        <Button x:Name="btnSaveFilm"
+                        <Button x:Name="btnSaveDirector"
                                 Grid.Column="1"
                                 BorderThickness="0"
-                                Content="Добавить фильм"
+                                Content="Добавить режиссера"
                                 Foreground="White"
                                 FontSize="12"
                                 FontFamily="Montserrat"
                                 Cursor="Hand"
                                 Margin="0,10,0,0"
-                                Click="btnSaveBtnFilm_Click">
+                                Click="btnAddDirector_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background"

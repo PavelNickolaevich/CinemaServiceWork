@@ -14,6 +14,12 @@ namespace CinemaServiceWork.ApplicationData
     
     public partial class Directors
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Directors()
+        {
+            this.MoviesDirectors = new HashSet<MoviesDirectors>();
+        }
+    
         public int DirectorID { get; set; }
         public string First_name { get; set; }
         public string Last_name { get; set; }
@@ -22,5 +28,7 @@ namespace CinemaServiceWork.ApplicationData
         public Nullable<int> CountryID { get; set; }
     
         public virtual Countries Countries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MoviesDirectors> MoviesDirectors { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace CinemaServiceWork.Utils
@@ -26,5 +27,6 @@ namespace CinemaServiceWork.Utils
                 return image;
             }
         }
+
     }
 }

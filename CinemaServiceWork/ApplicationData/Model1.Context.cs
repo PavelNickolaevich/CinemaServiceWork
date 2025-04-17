@@ -33,7 +33,9 @@ namespace CinemaServiceWork.ApplicationData
         public virtual DbSet<FilmPublishings> FilmPublishings { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
         public virtual DbSet<Movies> Movies { get; set; }
+        public virtual DbSet<MoviesActors> MoviesActors { get; set; }
         public virtual DbSet<MoviesCountries> MoviesCountries { get; set; }
+        public virtual DbSet<MoviesDirectors> MoviesDirectors { get; set; }
         public virtual DbSet<MoviesGenres> MoviesGenres { get; set; }
         public virtual DbSet<Studio> Studio { get; set; }
         public virtual DbSet<Users> Users { get; set; }

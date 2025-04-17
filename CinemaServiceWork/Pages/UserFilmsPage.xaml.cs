@@ -27,7 +27,6 @@ namespace CinemaServiceWork.Pages
         public UserFilmsPage()
         {
             InitializeComponent();
-            //  Tww.Content = new Menu();
             AppFrame.menuFrame = MenuFrame;
             AppFrame.contentFrame = ContetntFrame;
             MenuFrame.Navigate(new Pages.Menu());

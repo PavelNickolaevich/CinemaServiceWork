@@ -35,6 +35,12 @@ namespace CinemaServiceWork.Pages
 
         }
 
+        private void MyPageFilmsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.contentFrame.Navigate(new Pages.MyFilmsPage());
+        }
+
+
         private void favoritesBtn_Click(object sender, RoutedEventArgs e)
         {
             AppFrame.contentFrame.Navigate(new Pages.FavoritePage());
@@ -48,6 +54,11 @@ namespace CinemaServiceWork.Pages
         private void AddActorBtn_Click(object sender, RoutedEventArgs e)
         {
             AppFrame.contentFrame.Navigate(new Pages.NewActorPage());
+        }
+
+        private void AddDirectorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.contentFrame.Navigate(new Pages.NewDirectorPage());
         }
     }
 }

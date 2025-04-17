@@ -241,6 +241,67 @@
         </Style>
 
 
+        <!-- Цвета для состояний -->
+        <SolidColorBrush x:Key="SelectedItemBrush"
+                         Color="#FF5D9CEC" />
+        <SolidColorBrush x:Key="SelectedTextBrush"
+                         Color="White" />
+        <SolidColorBrush x:Key="MouseOverItemBrush"
+                         Color="#FFE1F0FF" />
+
+        <!-- Стиль для ListBox -->
+        <Style x:Key="SelectListBoxItems"
+               TargetType="ListBox">
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="#FFABADB3" />
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Disabled" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin"
+                                Value="2" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Name="Border"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="4,2">
+                                        <ContentPresenter />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <!-- При наведении -->
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter TargetName="Border"
+                                                    Property="Background"
+                                                    Value="{StaticResource MouseOverItemBrush}" />
+                                        </Trigger>
+
+                                        <!-- При выборе -->
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter TargetName="Border"
+                                                    Property="Background"
+                                                    Value="{StaticResource SelectedItemBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{StaticResource SelectedTextBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
 
     </Application.Resources>
 </Application>

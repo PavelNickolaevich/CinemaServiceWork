@@ -107,7 +107,13 @@
     <Compile Include="ApplicationData\Movies.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationData\MoviesActors.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationData\MoviesCountries.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationData\MoviesDirectors.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ApplicationData\MoviesGenres.cs">
@@ -128,8 +134,14 @@
     <Compile Include="Pages\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MyFilmsPage.xaml.cs">
+      <DependentUpon>MyFilmsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\NewActorPage.xaml.cs">
       <DependentUpon>NewActorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NewDirectorPage.xaml.cs">
+      <DependentUpon>NewDirectorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\NewFilmPage.xaml.cs">
       <DependentUpon>NewFilmPage.xaml</DependentUpon>
@@ -140,6 +152,8 @@
     <Compile Include="Pages\UserFilmsPage.xaml.cs">
       <DependentUpon>UserFilmsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Converters\Base64ToImageConverter .cs" />
+    <Compile Include="Utils\Converters\GenresCollectionToStringConverter .cs" />
     <Compile Include="Utils\UtilsMethods.cs" />
     <Compile Include="Utils\ValidateFields.cs" />
     <Page Include="MainWindow.xaml">
@@ -172,7 +186,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\MyFilmsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\NewActorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\NewDirectorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,16 +268,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApplicationData\Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="ApplicationData\Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
     <Resource Include="Images\poster-blank.png" />
     <Resource Include="Images\db2.png" />
     <Resource Include="Images\db_log.png" />
@@ -266,6 +278,18 @@
     <Resource Include="Images\blank-poster-new.jpg" />
     <Resource Include="Images\blank-poster.jpg" />
     <Resource Include="Images\blank-cinema.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationData\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ApplicationData\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

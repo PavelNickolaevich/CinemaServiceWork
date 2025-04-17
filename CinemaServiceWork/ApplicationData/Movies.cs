@@ -19,7 +19,9 @@ namespace CinemaServiceWork.ApplicationData
         {
             this.FilmPublishings = new HashSet<FilmPublishings>();
             this.Favorites = new HashSet<Favorites>();
+            this.MoviesActors = new HashSet<MoviesActors>();
             this.MoviesCountries = new HashSet<MoviesCountries>();
+            this.MoviesDirectors = new HashSet<MoviesDirectors>();
             this.MoviesGenres = new HashSet<MoviesGenres>();
         }
     
@@ -36,8 +38,14 @@ namespace CinemaServiceWork.ApplicationData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Favorites> Favorites { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MoviesActors> MoviesActors { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesCountries> MoviesCountries { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MoviesDirectors> MoviesDirectors { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesGenres> MoviesGenres { get; set; }
+
+        public string Genres { get; set; }
     }
 }

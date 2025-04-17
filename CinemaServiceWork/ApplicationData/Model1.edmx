@@ -93,6 +93,14 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="Rating" Type="decimal" Precision="3" Scale="1" />
           <Property Name="Poster" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="MoviesActors">
+          <Key>
+            <PropertyRef Name="MoviesActorsID" />
+          </Key>
+          <Property Name="MoviesActorsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MoviesID" Type="int" Nullable="false" />
+          <Property Name="ActorsID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="MoviesCountries">
           <Key>
             <PropertyRef Name="MovieCountryID" />
@@ -100,6 +108,14 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="MovieCountryID" Type="int" Nullable="false" />
           <Property Name="MovieID" Type="int" Nullable="false" />
           <Property Name="CountryID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MoviesDirectors">
+          <Key>
+            <PropertyRef Name="MoviesDirectorsID" />
+          </Key>
+          <Property Name="MoviesDirectorsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MoviesID" Type="int" Nullable="false" />
+          <Property Name="DirectorsID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MoviesGenres">
           <Key>
@@ -272,6 +288,30 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MoviesActors_Actors">
+          <End Role="Actors" Type="Self.Actors" Multiplicity="1" />
+          <End Role="MoviesActors" Type="Self.MoviesActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Actors">
+              <PropertyRef Name="ActorID" />
+            </Principal>
+            <Dependent Role="MoviesActors">
+              <PropertyRef Name="ActorsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesActors_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MoviesActors" Type="Self.MoviesActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="MoviesActors">
+              <PropertyRef Name="MoviesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MoviesCountries_Countries">
           <End Role="Countries" Type="Self.Countries" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -297,6 +337,30 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Principal>
             <Dependent Role="MoviesCountries">
               <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesDirectors_Directors">
+          <End Role="Directors" Type="Self.Directors" Multiplicity="1" />
+          <End Role="MoviesDirectors" Type="Self.MoviesDirectors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Directors">
+              <PropertyRef Name="DirectorID" />
+            </Principal>
+            <Dependent Role="MoviesDirectors">
+              <PropertyRef Name="DirectorsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesDirectors_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MoviesDirectors" Type="Self.MoviesDirectors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="MoviesDirectors">
+              <PropertyRef Name="MoviesID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -349,7 +413,9 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <EntitySet Name="FilmPublishings" EntityType="Self.FilmPublishings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genres" EntityType="Self.Genres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movies" EntityType="Self.Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MoviesActors" EntityType="Self.MoviesActors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MoviesCountries" EntityType="Self.MoviesCountries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MoviesDirectors" EntityType="Self.MoviesDirectors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MoviesGenres" EntityType="Self.MoviesGenres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Studio" EntityType="Self.Studio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -404,6 +470,14 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             <End Role="Genres" EntitySet="Genres" />
             <End Role="Genres1" EntitySet="Genres" />
           </AssociationSet>
+          <AssociationSet Name="FK_MoviesActors_Actors" Association="Self.FK_MoviesActors_Actors">
+            <End Role="Actors" EntitySet="Actors" />
+            <End Role="MoviesActors" EntitySet="MoviesActors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MoviesActors_Movies" Association="Self.FK_MoviesActors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MoviesActors" EntitySet="MoviesActors" />
+          </AssociationSet>
           <AssociationSet Name="FK_MoviesCountries_Countries" Association="Self.FK_MoviesCountries_Countries">
             <End Role="Countries" EntitySet="Countries" />
             <End Role="MoviesCountries" EntitySet="MoviesCountries" />
@@ -411,6 +485,14 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <AssociationSet Name="FK_MoviesCountries_Movies" Association="Self.FK_MoviesCountries_Movies">
             <End Role="Movies" EntitySet="Movies" />
             <End Role="MoviesCountries" EntitySet="MoviesCountries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MoviesDirectors_Directors" Association="Self.FK_MoviesDirectors_Directors">
+            <End Role="Directors" EntitySet="Directors" />
+            <End Role="MoviesDirectors" EntitySet="MoviesDirectors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MoviesDirectors_Movies" Association="Self.FK_MoviesDirectors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MoviesDirectors" EntitySet="MoviesDirectors" />
           </AssociationSet>
           <AssociationSet Name="FK_MoviesGenres_Genres" Association="Self.FK_MoviesGenres_Genres">
             <End Role="Genres" EntitySet="Genres" />
@@ -441,6 +523,7 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="Birth_of_date" Type="DateTime" Precision="0" />
           <Property Name="CountryID" Type="Int32" />
           <NavigationProperty Name="Countries" Relationship="Self.FK_Actors_Country" FromRole="Actors" ToRole="Countries" />
+          <NavigationProperty Name="MoviesActors" Relationship="Self.FK_MoviesActors_Actors" FromRole="Actors" ToRole="MoviesActors" />
         </EntityType>
         <EntityType Name="Comments">
           <Key>
@@ -477,6 +560,7 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="Date_of_birth" Type="DateTime" Precision="0" />
           <Property Name="CountryID" Type="Int32" />
           <NavigationProperty Name="Countries" Relationship="Self.FK_Directors_Country" FromRole="Directors" ToRole="Countries" />
+          <NavigationProperty Name="MoviesDirectors" Relationship="Self.FK_MoviesDirectors_Directors" FromRole="Directors" ToRole="MoviesDirectors" />
         </EntityType>
         <EntityType Name="Discussions">
           <Key>
@@ -525,8 +609,20 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="Poster" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FilmPublishings" Relationship="Self.FK_FilmPublishings_FilmPublishings" FromRole="Movies" ToRole="FilmPublishings" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Movies" FromRole="Movies" ToRole="Favorites" />
+          <NavigationProperty Name="MoviesActors" Relationship="Self.FK_MoviesActors_Movies" FromRole="Movies" ToRole="MoviesActors" />
           <NavigationProperty Name="MoviesCountries" Relationship="Self.FK_MoviesCountries_Movies" FromRole="Movies" ToRole="MoviesCountries" />
+          <NavigationProperty Name="MoviesDirectors" Relationship="Self.FK_MoviesDirectors_Movies" FromRole="Movies" ToRole="MoviesDirectors" />
           <NavigationProperty Name="MoviesGenres" Relationship="Self.FK_MoviesGenres_Movies" FromRole="Movies" ToRole="MoviesGenres" />
+        </EntityType>
+        <EntityType Name="MoviesActors">
+          <Key>
+            <PropertyRef Name="MoviesActorsID" />
+          </Key>
+          <Property Name="MoviesActorsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MoviesID" Type="Int32" Nullable="false" />
+          <Property Name="ActorsID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Actors" Relationship="Self.FK_MoviesActors_Actors" FromRole="MoviesActors" ToRole="Actors" />
+          <NavigationProperty Name="Movies" Relationship="Self.FK_MoviesActors_Movies" FromRole="MoviesActors" ToRole="Movies" />
         </EntityType>
         <EntityType Name="MoviesCountries">
           <Key>
@@ -537,6 +633,16 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <Property Name="CountryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Countries" Relationship="Self.FK_MoviesCountries_Countries" FromRole="MoviesCountries" ToRole="Countries" />
           <NavigationProperty Name="Movies" Relationship="Self.FK_MoviesCountries_Movies" FromRole="MoviesCountries" ToRole="Movies" />
+        </EntityType>
+        <EntityType Name="MoviesDirectors">
+          <Key>
+            <PropertyRef Name="MoviesDirectorsID" />
+          </Key>
+          <Property Name="MoviesDirectorsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MoviesID" Type="Int32" Nullable="false" />
+          <Property Name="DirectorsID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Directors" Relationship="Self.FK_MoviesDirectors_Directors" FromRole="MoviesDirectors" ToRole="Directors" />
+          <NavigationProperty Name="Movies" Relationship="Self.FK_MoviesDirectors_Movies" FromRole="MoviesDirectors" ToRole="Movies" />
         </EntityType>
         <EntityType Name="MoviesGenres">
           <Key>
@@ -594,6 +700,18 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Principal>
             <Dependent Role="Actors">
               <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesActors_Actors">
+          <End Role="Actors" Type="Self.Actors" Multiplicity="1" />
+          <End Role="MoviesActors" Type="Self.MoviesActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Actors">
+              <PropertyRef Name="ActorID" />
+            </Principal>
+            <Dependent Role="MoviesActors">
+              <PropertyRef Name="ActorsID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -670,6 +788,18 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Principal>
             <Dependent Role="Studio">
               <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesDirectors_Directors">
+          <End Role="Directors" Type="Self.Directors" Multiplicity="1" />
+          <End Role="MoviesDirectors" Type="Self.MoviesDirectors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Directors">
+              <PropertyRef Name="DirectorID" />
+            </Principal>
+            <Dependent Role="MoviesDirectors">
+              <PropertyRef Name="DirectorsID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -753,6 +883,18 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MoviesActors_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MoviesActors" Type="Self.MoviesActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="MoviesActors">
+              <PropertyRef Name="MoviesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MoviesCountries_Movies">
           <End Role="Movies" Type="Self.Movies" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -764,6 +906,18 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             </Principal>
             <Dependent Role="MoviesCountries">
               <PropertyRef Name="MovieID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MoviesDirectors_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MoviesDirectors" Type="Self.MoviesDirectors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieID" />
+            </Principal>
+            <Dependent Role="MoviesDirectors">
+              <PropertyRef Name="MoviesID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -804,7 +958,9 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <EntitySet Name="FilmPublishings" EntityType="Self.FilmPublishings" />
           <EntitySet Name="Genres" EntityType="Self.Genres" />
           <EntitySet Name="Movies" EntityType="Self.Movies" />
+          <EntitySet Name="MoviesActors" EntityType="Self.MoviesActors" />
           <EntitySet Name="MoviesCountries" EntityType="Self.MoviesCountries" />
+          <EntitySet Name="MoviesDirectors" EntityType="Self.MoviesDirectors" />
           <EntitySet Name="MoviesGenres" EntityType="Self.MoviesGenres" />
           <EntitySet Name="Studio" EntityType="Self.Studio" />
           <EntitySet Name="Users" EntityType="Self.Users" />
@@ -812,6 +968,10 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
           <AssociationSet Name="FK_Actors_Country" Association="Self.FK_Actors_Country">
             <End Role="Countries" EntitySet="Countries" />
             <End Role="Actors" EntitySet="Actors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MoviesActors_Actors" Association="Self.FK_MoviesActors_Actors">
+            <End Role="Actors" EntitySet="Actors" />
+            <End Role="MoviesActors" EntitySet="MoviesActors" />
           </AssociationSet>
           <AssociationSet Name="FK_Comments_Discussions" Association="Self.FK_Comments_Discussions">
             <End Role="Discussions" EntitySet="Discussions" />
@@ -837,6 +997,10 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             <End Role="Countries" EntitySet="Countries" />
             <End Role="Studio" EntitySet="Studio" />
           </AssociationSet>
+          <AssociationSet Name="FK_MoviesDirectors_Directors" Association="Self.FK_MoviesDirectors_Directors">
+            <End Role="Directors" EntitySet="Directors" />
+            <End Role="MoviesDirectors" EntitySet="MoviesDirectors" />
+          </AssociationSet>
           <AssociationSet Name="FK_Discussions_FilmPublishings" Association="Self.FK_Discussions_FilmPublishings">
             <End Role="FilmPublishings" EntitySet="FilmPublishings" />
             <End Role="Discussions" EntitySet="Discussions" />
@@ -861,9 +1025,17 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
             <End Role="Movies" EntitySet="Movies" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
+          <AssociationSet Name="FK_MoviesActors_Movies" Association="Self.FK_MoviesActors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MoviesActors" EntitySet="MoviesActors" />
+          </AssociationSet>
           <AssociationSet Name="FK_MoviesCountries_Movies" Association="Self.FK_MoviesCountries_Movies">
             <End Role="Movies" EntitySet="Movies" />
             <End Role="MoviesCountries" EntitySet="MoviesCountries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MoviesDirectors_Movies" Association="Self.FK_MoviesDirectors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MoviesDirectors" EntitySet="MoviesDirectors" />
           </AssociationSet>
           <AssociationSet Name="FK_MoviesGenres_Movies" Association="Self.FK_MoviesGenres_Movies">
             <End Role="Movies" EntitySet="Movies" />
@@ -964,12 +1136,30 @@ warning 6002: The table/view 'Cinema.dbo.Favorites' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MoviesActors">
+            <EntityTypeMapping TypeName="CinemaModel.MoviesActors">
+              <MappingFragment StoreEntitySet="MoviesActors">
+                <ScalarProperty Name="MoviesActorsID" ColumnName="MoviesActorsID" />
+                <ScalarProperty Name="MoviesID" ColumnName="MoviesID" />
+                <ScalarProperty Name="ActorsID" ColumnName="ActorsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MoviesCountries">
             <EntityTypeMapping TypeName="CinemaModel.MoviesCountries">
               <MappingFragment StoreEntitySet="MoviesCountries">
                 <ScalarProperty Name="MovieCountryID" ColumnName="MovieCountryID" />
                 <ScalarProperty Name="MovieID" ColumnName="MovieID" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MoviesDirectors">
+            <EntityTypeMapping TypeName="CinemaModel.MoviesDirectors">
+              <MappingFragment StoreEntitySet="MoviesDirectors">
+                <ScalarProperty Name="MoviesDirectorsID" ColumnName="MoviesDirectorsID" />
+                <ScalarProperty Name="MoviesID" ColumnName="MoviesID" />
+                <ScalarProperty Name="DirectorsID" ColumnName="DirectorsID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

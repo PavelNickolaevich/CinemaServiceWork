@@ -17,20 +17,20 @@ using System.Windows.Shapes;
 namespace CinemaServiceWork.Pages
 {
     /// <summary>
-    /// Interaction logic for NewActorPage.xaml
+    /// Interaction logic for NewDirectorPage.xaml
     /// </summary>
-    public partial class NewActorPage : Page
+    public partial class NewDirectorPage : Page
     {
+
         private CinemaEntities _context = new CinemaEntities();
-        public NewActorPage()
+        public NewDirectorPage()
         {
             InitializeComponent();
             this.DataContext = AppConnect.cinemaEntities;
             listCountries.ItemsSource = AppConnect.cinemaEntities.Countries.ToList();
-
         }
 
-        private void btnAddActor_Click(object sender, RoutedEventArgs e)
+        private void btnAddDirector_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -58,36 +58,36 @@ namespace CinemaServiceWork.Pages
                 string patronymic = string.IsNullOrWhiteSpace(txtPatronymic.Text) ? null : txtPatronymic.Text.Trim();
                 DateTime birthDate = dateBirthPicker.SelectedDate.Value;
 
-                bool actorExists = _context.Actors.Any(a =>
+                bool directorExists = _context.Directors.Any(a =>
                     a.First_name.Equals(firstName, StringComparison.CurrentCultureIgnoreCase) &&
                     a.Last_name.Equals(lastName, StringComparison.CurrentCultureIgnoreCase) &&
                     (a.Patronymic == null && patronymic == null ||
                      a.Patronymic != null && a.Patronymic.Equals(patronymic, StringComparison.CurrentCultureIgnoreCase)) &&
-                    a.Birth_of_date == birthDate &&
+                    a.Date_of_birth == birthDate &&
                     a.CountryID == selectedCountry.CountryID);
 
-                if (actorExists)
+                if (directorExists)
                 {
-                    MessageBox.Show("Актер с такими данными уже существует в базе.",
+                    MessageBox.Show("Режиссер с такими данными уже существует в базе.",
                                   "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
 
-                var newActor = new Actors
+                var newDirector = new Directors
                 {
                     First_name = firstName,
                     Last_name = lastName,
                     Patronymic = patronymic,
-                    Birth_of_date = birthDate,
+                    Date_of_birth = birthDate,
                     CountryID = selectedCountry.CountryID
                 };
 
-                _context.Actors.Add(newActor);
+                _context.Directors.Add(newDirector);
                 _context.SaveChanges();
                 ClearFields();
 
-                MessageBox.Show($"{newActor.First_name} {newActor.Last_name} успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{newDirector.First_name} {newDirector.Last_name} успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace CinemaServiceWork.Pages
             }
         }
 
-        private void btnClearActor_Click(object sender, RoutedEventArgs e)
+        private void btnClearDirector_Click(object sender, RoutedEventArgs e)
         {
             ClearFields();
         }
@@ -111,6 +111,5 @@ namespace CinemaServiceWork.Pages
             listCountries.Text = string.Empty;
 
         }
-
     }
 }

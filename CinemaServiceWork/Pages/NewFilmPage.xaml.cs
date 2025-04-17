@@ -18,6 +18,9 @@ using System.Windows.Shapes;
 using System.Drawing;
 using System.IO;
 using CinemaServiceWork.Utils;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
+using Image = System.Windows.Controls.Image;
 
 namespace CinemaServiceWork.Pages
 {
@@ -32,35 +35,41 @@ namespace CinemaServiceWork.Pages
         public NewFilmPage()
         {
             InitializeComponent();
-            this.DataContext = AppConnect.cinemaEntities;
+          // this.DataContext = _context;
             listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
+            listActors.ItemsSource = AppConnect.cinemaEntities.Actors.ToList();
+            listDirectors.ItemsSource = AppConnect.cinemaEntities.Directors.ToList();
+        }
+
+
+        public NewFilmPage(Movies movie)
+        {
+            InitializeComponent();
+            txtName.Text = movie.Title;
+            listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
+
+            // Устанавливаем выбранный жанр
+            if (movie.MoviesGenres != null && movie.MoviesGenres.Any())
+            {
+                // Предполагаем, что у фильма может быть несколько жанров
+                // Выбираем все соответствующие жанры в списке
+                foreach (var genre in listGenre.Items)
+                {
+                    if (genre is Genres g && movie.MoviesGenres.Any(mg => mg.GenreID == g.GenreID))
+                    {
+                        listGenre.SelectedItems.Add(genre);
+                    }
+                }
+            }
         }
 
 
 
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+            private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
          
         }
 
-        /*     private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
-             {
-                 var openFileDialog = new OpenFileDialog
-                 {
-                     Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png",
-                     Title = "Выберите постер фильма"
-                 };
-
-                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-                 {
-                     txtImagePath.Text = openFileDialog.FileName;
-
-                     // Показываем превью
-                     var bitmap = new BitmapImage(new Uri(openFileDialog.FileName));
-                     imgPoster.Source = bitmap;
-                 }
-
-             }*/
 
         private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
         {
@@ -72,13 +81,7 @@ namespace CinemaServiceWork.Pages
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string imagePath = openFileDialog.FileName;
-
-                // Конвертируем изображение в Base64 строку
-                byte[] imageBytes = File.ReadAllBytes(imagePath);
-                string base64String = Convert.ToBase64String(imageBytes);
-
-                // Сохраняем строку (можно сохранять сразу в свойство newFilm.Poster при сохранении)
-                _posterImageData = base64String;
+                _posterImageData = LoadToBase64(imagePath);
 
                 // Показываем изображение в интерфейсе
                 imgPoster.Source = new BitmapImage(new Uri(imagePath));
@@ -87,7 +90,7 @@ namespace CinemaServiceWork.Pages
             }
         }
 
-        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        private void btnSaveBtnFilm_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -102,6 +105,28 @@ namespace CinemaServiceWork.Pages
                 {
                     System.Windows.MessageBox.Show("Пожалуйста, заполните все поля и выберите хотя бы один жанр.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
+                }
+
+                if(_posterImageData == null)
+                {
+                    var imageUri = "/Images/poster-blank.png";
+                    Uri uri = new Uri("pack://application:,,," + imageUri, UriKind.Absolute);
+
+                    // Получаем поток ресурса
+                    var streamInfo = System.Windows.Application.GetResourceStream(uri);
+                    if (streamInfo == null)
+                    {
+                        throw new FileNotFoundException($"Resource not found: {imageUri}");
+                    }
+
+                    // Читаем байты
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        streamInfo.Stream.CopyTo(memoryStream);
+                        byte[] imageBytes = memoryStream.ToArray();
+                        _posterImageData =  Convert.ToBase64String(imageBytes);
+                    }
+                   
                 }
 
                 // Проверка числовых полей
@@ -135,6 +160,26 @@ namespace CinemaServiceWork.Pages
                     });
                 }
 
+                //Добавление актеров
+                foreach (Actors selectedActors in listActors.SelectedItems)
+                {
+                    newFilm.MoviesActors.Add(new MoviesActors
+                    {
+                        MoviesID = newFilm.MovieID,
+                        ActorsID = selectedActors.ActorID
+                    });
+                }
+
+                //Добавление режиссеров
+                foreach (Directors selectedDirectors in listDirectors.SelectedItems)
+                {
+                    newFilm.MoviesDirectors.Add(new MoviesDirectors
+                    {
+                        MoviesID = newFilm.MovieID,
+                        DirectorsID = selectedDirectors.DirectorID
+                    });
+                }
+
                 _context.Movies.Add(newFilm);
                 _context.SaveChanges();
 
@@ -161,6 +206,11 @@ namespace CinemaServiceWork.Pages
             }
         }
 
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearFields();
+        }
+
 
         private void ClearFields()
         {
@@ -170,10 +220,19 @@ namespace CinemaServiceWork.Pages
             txtDuration.Text = string.Empty;
             txtRating.Text = string.Empty;
             listGenre.SelectedItems.Clear();
-            imgPoster.Source = null;
-            imgPoster.Visibility = Visibility.Collapsed;
+            listActors.SelectedItems.Clear();
+            listDirectors.SelectedItems.Clear();
+            imgPoster.Source = new BitmapImage(new Uri("/Images/poster-blank.png", UriKind.RelativeOrAbsolute));
             txtImagePath.Text = string.Empty;
             _posterImageData = null;
+        }
+
+        private string LoadToBase64(string imagePath)
+        {
+            byte[] imageBytes = File.ReadAllBytes(imagePath);
+            string base64String = Convert.ToBase64String(imageBytes);
+
+            return base64String;
         }
     }
 }
