@@ -46,6 +46,10 @@ namespace CinemaServiceWork.ApplicationData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesGenres> MoviesGenres { get; set; }
 
+        //public List<MoviesGenres> test { get {
+
+        //        MoviesGenres.Contains()
+        //    } }}
         public string Genres { get; set; }
     }
 }

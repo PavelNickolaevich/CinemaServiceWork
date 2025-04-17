@@ -4,10 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CinemaServiceWork.Pages"
+      xmlns:converters="clr-namespace:CinemaServiceWork.Utils.Converters"
       mc:Ignorable="d"
       d:DesignHeight="520"
       d:DesignWidth="600"
       Title="NewFilmPage">
+
+
+    <Page.Resources>
+        <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+    </Page.Resources>
 
     <Border CornerRadius="10"
             Margin="10, 0 10, 0">
@@ -101,22 +107,27 @@
                     <TextBox x:Name="txtName"
                              Grid.Row="0"
                              Grid.Column="1"
-                             Style="{StaticResource addTextBox}" />
+                             Style="{StaticResource addTextBox}" 
+                             Text="{Binding Title}"/>
                     <TextBox x:Name="txtDescription"
                              Grid.Row="1"
                              Grid.Column="1"
+                              Text="{Binding Description}"
                              Style="{StaticResource addTextBox}" />
                     <TextBox x:Name="txtYear"
                              Grid.Row="2"
+                             Text="{Binding Release_year}"
                              Grid.Column="1"
                              Style="{StaticResource addTextBox}" />
                     <TextBox x:Name="txtDuration"
                              Grid.Row="3"
                              Grid.Column="1"
+                              Text="{Binding Duration}"
                              Style="{StaticResource addTextBox}" />
                     <TextBox x:Name="txtRating"
                              Grid.Row="4"
                              Grid.Column="1"
+                              Text="{Binding Rating}"
                              Style="{StaticResource addTextBox}" />
                     <ListBox Grid.Row="5"
                              Grid.Column="1"
@@ -193,9 +204,13 @@
 
                             <Image x:Name="imgPoster"
                                    Grid.Column="0"
-                                   Source="/Images/poster-blank.png"
+                         
                                    Width="100"
                                    Height="100"
+                                   Source="{Binding Poster, Converter={StaticResource Base64ToImageConverter}}"
+                                  
+                                   
+                                   
                                    Stretch="Uniform" />
                             
                             <Button x:Name="btnSelectImage"

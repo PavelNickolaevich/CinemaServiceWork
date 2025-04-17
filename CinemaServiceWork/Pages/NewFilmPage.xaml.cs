@@ -21,6 +21,7 @@ using CinemaServiceWork.Utils;
 using static System.Net.Mime.MediaTypeNames;
 using System.Reflection;
 using Image = System.Windows.Controls.Image;
+using CinemaServiceWork.Utils.Converters;
 
 namespace CinemaServiceWork.Pages
 {
@@ -32,10 +33,12 @@ namespace CinemaServiceWork.Pages
 
         private string _posterImageData;
         private CinemaEntities _context = new CinemaEntities();
+        private Movies _movie;
+
+
         public NewFilmPage()
         {
             InitializeComponent();
-          // this.DataContext = _context;
             listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
             listActors.ItemsSource = AppConnect.cinemaEntities.Actors.ToList();
             listDirectors.ItemsSource = AppConnect.cinemaEntities.Directors.ToList();
@@ -45,30 +48,44 @@ namespace CinemaServiceWork.Pages
         public NewFilmPage(Movies movie)
         {
             InitializeComponent();
-            txtName.Text = movie.Title;
+     
             listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
+            listActors.ItemsSource = AppConnect.cinemaEntities.Actors.ToList();
+            listDirectors.ItemsSource = AppConnect.cinemaEntities.Directors.ToList();
 
-            // Устанавливаем выбранный жанр
-            if (movie.MoviesGenres != null && movie.MoviesGenres.Any())
+            foreach (var actor in listActors.Items)
             {
-                // Предполагаем, что у фильма может быть несколько жанров
-                // Выбираем все соответствующие жанры в списке
-                foreach (var genre in listGenre.Items)
+                if (actor is Actors a && movie.MoviesActors.Any(ma => ma.ActorsID == a.ActorID))
+                {
+                    listActors.SelectedItems.Add(actor);
+                }
+            }
+
+            foreach (var director in listDirectors.Items)
+            {
+                if (director is Directors d && movie.MoviesDirectors.Any(md => md.DirectorsID == d.DirectorID))
+                {
+                    listDirectors.SelectedItems.Add(director);
+                }
+            }
+
+            foreach (var genre in listGenre.Items)
                 {
                     if (genre is Genres g && movie.MoviesGenres.Any(mg => mg.GenreID == g.GenreID))
                     {
                         listGenre.SelectedItems.Add(genre);
                     }
                 }
+            DataContext = movie;
+            _posterImageData = movie.Poster;
+            _movie = movie;
+
+            if (movie != null)
+            {
+                btnSaveFilm.Content = "Изменить";
             }
         }
 
-
-
-            private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-         
-        }
 
 
         private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
@@ -100,14 +117,14 @@ namespace CinemaServiceWork.Pages
                     string.IsNullOrWhiteSpace(txtYear.Text) ||
                     string.IsNullOrWhiteSpace(txtDuration.Text) ||
                     string.IsNullOrWhiteSpace(txtRating.Text) ||
-               //    _posterImageData == null ||
+                    //    _posterImageData == null ||
                     listGenre.SelectedItems.Count == 0)
                 {
                     System.Windows.MessageBox.Show("Пожалуйста, заполните все поля и выберите хотя бы один жанр.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                if(_posterImageData == null)
+                if (_posterImageData == null)
                 {
                     var imageUri = "/Images/poster-blank.png";
                     Uri uri = new Uri("pack://application:,,," + imageUri, UriKind.Absolute);
@@ -124,63 +141,74 @@ namespace CinemaServiceWork.Pages
                     {
                         streamInfo.Stream.CopyTo(memoryStream);
                         byte[] imageBytes = memoryStream.ToArray();
-                        _posterImageData =  Convert.ToBase64String(imageBytes);
+                        _posterImageData = Convert.ToBase64String(imageBytes);
                     }
-                   
+
                 }
 
                 // Проверка числовых полей
-          /*      if (!int.TryParse(txtYear.Text, out int year) ||
-                    !int.TryParse(txtDuration.Text, out int duration) ||
-                    !double.TryParse(txtRating.Text, out double rating) ||
-                    rating < 0 || rating > 10)
-                {
-                    System.Windows.MessageBox.Show("Пожалуйста, проверьте правильность ввода числовых полей. Рейтинг должен быть от 0 до 10.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }*/
+                /*      if (!int.TryParse(txtYear.Text, out int year) ||
+                          !int.TryParse(txtDuration.Text, out int duration) ||
+                          !double.TryParse(txtRating.Text, out double rating) ||
+                          rating < 0 || rating > 10)
+                      {
+                          System.Windows.MessageBox.Show("Пожалуйста, проверьте правильность ввода числовых полей. Рейтинг должен быть от 0 до 10.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                          return;
+                      }*/
 
-                // Создание нового фильма
-                var newFilm = new Movies
+                if (_movie == null)
                 {
-                    Title = txtName.Text,
-                    Description = txtDescription.Text,
-                    Release_year = Convert.ToInt32(txtYear.Text),
-                    Duration = Convert.ToInt32(txtDuration.Text),
-                    Rating = Convert.ToDecimal(txtRating.Text),
-                    Poster = _posterImageData as string
-                };
-
-                //Добавление жанров
-                foreach (Genres selectedGenre in listGenre.SelectedItems)
-                {
-                    newFilm.MoviesGenres.Add(new MoviesGenres
                     {
-                        MovieID = newFilm.MovieID,
-                        GenreID = selectedGenre.GenreID
-                    });
+
+
+                        // Создание нового фильма
+                        var newFilm = new Movies
+                        {
+                            Title = txtName.Text,
+                            Description = txtDescription.Text,
+                            Release_year = Convert.ToInt32(txtYear.Text),
+                            Duration = Convert.ToInt32(txtDuration.Text),
+                            Rating = Convert.ToDecimal(txtRating.Text),
+                            Poster = _posterImageData as string
+                        };
+
+                        //Добавление жанров
+                        foreach (Genres selectedGenre in listGenre.SelectedItems)
+                        {
+                            newFilm.MoviesGenres.Add(new MoviesGenres
+                            {
+                                MovieID = newFilm.MovieID,
+                                GenreID = selectedGenre.GenreID
+                            });
+                        }
+
+                        //Добавление актеров
+                        foreach (Actors selectedActors in listActors.SelectedItems)
+                        {
+                            newFilm.MoviesActors.Add(new MoviesActors
+                            {
+                                MoviesID = newFilm.MovieID,
+                                ActorsID = selectedActors.ActorID
+                            });
+                        }
+
+                        //Добавление режиссеров
+                        foreach (Directors selectedDirectors in listDirectors.SelectedItems)
+                        {
+                            newFilm.MoviesDirectors.Add(new MoviesDirectors
+                            {
+                                MoviesID = newFilm.MovieID,
+                                DirectorsID = selectedDirectors.DirectorID
+                            });
+                        }
+
+                        _context.Movies.Add(newFilm);
+                    }
+                } else
+                {
+
                 }
 
-                //Добавление актеров
-                foreach (Actors selectedActors in listActors.SelectedItems)
-                {
-                    newFilm.MoviesActors.Add(new MoviesActors
-                    {
-                        MoviesID = newFilm.MovieID,
-                        ActorsID = selectedActors.ActorID
-                    });
-                }
-
-                //Добавление режиссеров
-                foreach (Directors selectedDirectors in listDirectors.SelectedItems)
-                {
-                    newFilm.MoviesDirectors.Add(new MoviesDirectors
-                    {
-                        MoviesID = newFilm.MovieID,
-                        DirectorsID = selectedDirectors.DirectorID
-                    });
-                }
-
-                _context.Movies.Add(newFilm);
                 _context.SaveChanges();
 
                 System.Windows.MessageBox.Show("Фильм успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -233,6 +261,11 @@ namespace CinemaServiceWork.Pages
             string base64String = Convert.ToBase64String(imageBytes);
 
             return base64String;
+        }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
