@@ -24,13 +24,13 @@ namespace CinemaServiceWork.Pages
     /// </summary>
     public partial class UserFilmsPage : Page
     {
-        public UserFilmsPage()
+        public UserFilmsPage(Users user)
         {
             InitializeComponent();
             AppFrame.menuFrame = MenuFrame;
             AppFrame.contentFrame = ContetntFrame;
-            MenuFrame.Navigate(new Pages.Menu());
-            ContetntFrame.Navigate(new Pages.MainPage());
+            MenuFrame.Navigate(new Menu(user));
+            ContetntFrame.Navigate(new MainPage());
 
 
         }

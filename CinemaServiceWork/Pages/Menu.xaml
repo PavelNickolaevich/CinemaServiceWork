@@ -30,7 +30,6 @@
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
-
                 </Grid.RowDefinitions>
 
                 <Button Content="Моя страница"
@@ -51,8 +50,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         Height="30"
-                        Click="favoritesBtn_Click" />
-
+                        Click="FavoritesBtn_Click" />
 
                 <Button Content="Форум"
                         x:Name="forumBtn"
@@ -62,7 +60,6 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         Height="30" />
-
 
                 <Button Content="Добавить фильм"
                         x:Name="AddFilmBtn"
@@ -94,6 +91,16 @@
                         Height="30"
                         Click="AddDirectorBtn_Click" />
 
+                <!-- Новая кнопка для QR-кода Кинопоиска -->
+                <Button Content="Кинопоиск QR"
+                        x:Name="kinopoiskQRBtn"
+                        Style="{StaticResource TextHighlightButtonStyle}"
+                        Grid.Row="6"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Click="KinopoiskQRBtn_Click" />
 
                 <Button Content="Выход"
                         x:Name="exitBtn"
@@ -104,6 +111,92 @@
                         VerticalAlignment="Center"
                         Height="30"
                         Click="ExitBtn_Click" />
+
+                <!-- Попап для отображения QR-кода -->
+                <Popup x:Name="qrCodePopup"
+                       Grid.RowSpan="10"
+                       Placement="Center"
+                       StaysOpen="False"
+                       Width="300"
+                       Height="350">
+                    <Popup.AllowsTransparency>
+                        true
+                    </Popup.AllowsTransparency>
+                    <Border CornerRadius="10"
+                            Opacity="0.95"
+                            BorderThickness="2">
+
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0, 0"
+                                                 EndPoint="1, 1">
+                                <GradientStop Color="Aqua"
+                                              Offset="0" />
+                                <GradientStop Color="BlueViolet"
+                                              Offset="0.5" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <!-- Задаём сплошной фон для контента -->
+
+                        <!-- Градиентная рамка -->
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0, 0"
+                                                 EndPoint="1, 1">
+                                <GradientStop Color="Aqua"
+                                              Offset="0" />
+                                <GradientStop Color="Firebrick"
+                                              Offset="0.5" />
+                                <GradientStop Color="BlueViolet"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="QR-код для Кинопоиска"
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,10" />
+                            <Image x:Name="kinopoiskQRImage"
+                                   Width="200"
+                                   Height="200"
+                                   Stretch="Uniform"
+                                   Margin="0,0,0,10" />
+                            <TextBlock Text="Отсканируйте для перехода на Кинопоиск"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,10" />
+                            <Button Content="Закрыть"
+                                    Width="100"                           
+                                    HorizontalAlignment="Center"
+                                    Click="CloseQRPopup_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background"
+                                                Value="#462AD8" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver"
+                                                     Value="True">
+                                                <Setter Property="Background"
+                                                        Value="#FF67D167" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Width="100"
+                                                Height="40"
+                                                CornerRadius="20"
+                                                Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center"
+                                                              HorizontalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Popup>
             </Grid>
         </Border>
     </Border>

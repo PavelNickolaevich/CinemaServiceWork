@@ -10,12 +10,94 @@
       d:DesignWidth="600"
       Title="MyFilmsPage">
 
-    <Page.Resources>
-        <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
-    </Page.Resources>
 
-    <Border CornerRadius="10"
-            Margin="10, 0 10, 0">
+    <Page.Resources>
+        <!-- Конвертер изображения -->
+        <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+        
+        <!-- Стиль для кнопок сортировки -->
+            <Style x:Key="SortButtonStyle"
+                   TargetType="Button">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="BorderBrush"
+                        Value="#FF7C4DFF" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="Padding"
+                        Value="10,5" />
+                <Setter Property="Margin"
+                        Value="0,0,5,0" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="#1A7C4DFF" />
+                        <Setter Property="Foreground"
+                                Value="#FFB388FF" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Стиль для современных кнопок -->
+            <Style x:Key="ModernButtonStyle"
+                   TargetType="Button">
+                <Setter Property="Background"
+                        Value="#FF512DA8" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="BorderBrush"
+                        Value="#FF7C4DFF" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="Padding"
+                        Value="10,5" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="#FF673AB7" />
+                        <Setter Property="BorderBrush"
+                                Value="#FFB388FF" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Page.Resources>
+
+        <Border CornerRadius="10"
+            Margin="10, 0, 10, 0">
         <Border.Background>
             <ImageBrush ImageSource="/Images/Universe_VHS.jpg" />
         </Border.Background>
@@ -45,155 +127,468 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
-                <Grid HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                    <!-- Текст, когда фильмов нет -->
-                    <TextBlock x:Name="noFilmsText"
-                               Text="Фильмов нет - добавьте фильмы"
-                               FontSize="20"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="Collapsed" />
+                <!-- Панель фильтров и сортировки -->
+                <Border Grid.Row="0"
+                        Background="#33000000"
+                        CornerRadius="10"
+                        Margin="10"
+                        Padding="15"
+                        BorderThickness="1"
+                        BorderBrush="#FF673AB7">
+                    <StackPanel Orientation="Vertical">
+                        <!-- Поиск по названию -->
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <TextBox x:Name="searchTextBox"
+                                     Style="{StaticResource FilterTextBoxStyle}"
+                                     TextChanged="SearchTextBox_TextChanged"
+                                     ToolTip="Поиск по названию"
+                                     Margin="0,0,10,0"
+                                     Width="250" />
 
-                    <Button x:Name="btnAddFilms"
-                            Grid.Column="1"
-                            BorderThickness="0"
-                            Content="Добавить фильм"
-                            Foreground="White"
-                            FontSize="12"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            Margin="0,100,0,0"
-                            Click="btnAddFilm_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background"
-                                        Value="#462AD8" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver"
-                                             Value="True">
-                                        <Setter Property="Background"
-                                                Value="#FF67D167" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                            <!-- Кнопки сортировки -->
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="10,0,0,0">
+                                <TextBlock Text="Сортировка:"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0"
+                                           FontWeight="SemiBold" />
 
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="150"
-                                        Height="40"
-                                        CornerRadius="20"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center" />
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                                <!-- Сортировка по названию -->
+                                <Button x:Name="sortByNameBtn"
+                                        ToolTip="Сортировка по названию"
+                                        Style="{StaticResource SortButtonStyle}"
+                                        Click="SortByName_Click"
+                                        Margin="0,0,5,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="M0,5 L10,5 L5,0 Z"
+                                              Fill="White"
+                                              Stretch="Uniform"
+                                              Margin="0,0,5,0"
+                                              x:Name="nameSortArrow"
+                                              RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <RotateTransform Angle="0" />
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <TextBlock Text="Название" />
+                                    </StackPanel>
+                                </Button>
 
-                    <!-- Список фильмов -->
-                    <ListView x:Name="filmsListView"
-                              Width="550"
-                              Background="Transparent"
-                              SelectionChanged="OnSelectionChanged"
-                              SelectionMode="Single"
-                              BorderThickness="0">
+                                <!-- Сортировка по рейтингу -->
+                                <Button x:Name="sortByRatingBtn"
+                                        ToolTip="Сортировка по рейтингу"
+                                        Style="{StaticResource SortButtonStyle}"
+                                        Click="SortByRating_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="M0,5 L10,5 L5,0 Z"
+                                              Fill="White"
+                                              Stretch="Uniform"
+                                              Margin="0,0,5,0"
+                                              x:Name="ratingSortArrow"
+                                              RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <RotateTransform Angle="0" />
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <TextBlock Text="Рейтинг" />
+                                    </StackPanel>
+                                </Button>
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border CornerRadius="10"
-                                        Background="#33000000"
-                                        Margin="0,5"
-                                        Padding="10">
+                                <!-- Кнопка сброса фильтров в виде иконки -->
+                                <Button x:Name="clearFiltersButton"
+                                        ToolTip="Сбросить все фильтры и сортировку"
+                                        Style="{StaticResource SortButtonStyle}"
+                                        Click="ClearFilters_Click"
+                                        Margin="0,0,0,0"
+                                        Padding="8">
+                                    <Image Source="/Images/Buttons/cleanBtn.png"
+                                           Width="30"
+                                           Height="16"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Фильтры -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,15,0,0">
+                            <!-- Фильтр по жанру -->
+                            <Border CornerRadius="5"
+                                    Background="#22000000"
+                                    Padding="5"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Жанр:"
+                                               Foreground="#FFB388FF"
+                                               Margin="0,0,0,5"
+                                               FontWeight="SemiBold" />
+                                    <ComboBox x:Name="genreFilterComboBox"
+                                              Style="{StaticResource FilterComboBoxStyle}"
+                                              SelectionChanged="FilterComboBox_SelectionChanged"
+                                              ToolTip="Фильтр по жанру"
+                                              Width="150">
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Элемент фильтра по годам -->
+                            <Border CornerRadius="5"
+                                    Background="#22000000"
+                                    Padding="5"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Год выпуска:"
+                                               Foreground="#FFB388FF"
+                                               Margin="0,0,0,5"
+                                               FontWeight="SemiBold" />
+                                    <ComboBox x:Name="yearFilterComboBox"
+                                              Style="{StaticResource FilterComboBoxStyle}"
+                                              SelectionChanged="FilterComboBox_SelectionChanged"
+                                              ToolTip="Фильтр по году"
+                                              Width="150">
+                         
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Фильтр по рейтингу -->
+                            <Border CornerRadius="5"
+                                    Background="#22000000"
+                                    Padding="5"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Рейтинг:"
+                                               Foreground="#FFB388FF"
+                                               Margin="0,0,0,5"
+                                               FontWeight="SemiBold" />
+                                    <ComboBox x:Name="ratingFilterComboBox"
+                                              Style="{StaticResource FilterComboBoxStyle}"
+                                              SelectionChanged="FilterComboBox_SelectionChanged"
+                                              ToolTip="Фильтр по рейтингу"
+                                              Width="150">
+                                        <ComboBoxItem Content="Любой"
+                                                      Tag="0"
+                                                      IsSelected="True" />
+                                        <ComboBoxItem Content="9+ ★"
+                                                      Tag="9" />
+                                        <ComboBoxItem Content="8+ ★"
+                                                      Tag="8" />
+                                        <ComboBoxItem Content="7+ ★"
+                                                      Tag="7" />
+                                        <ComboBoxItem Content="6+ ★"
+                                                      Tag="6" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                    
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Список фильмов -->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+
+
+                        <!-- Текст, когда фильмов нет -->
+                        <TextBlock x:Name="noFilmsText"
+                                   Text="Фильмов нет - добавьте фильмы"
+                                   FontSize="20"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="Collapsed" />
+
+                        <Button x:Name="btnAddFilms"
+                                Grid.Column="1"
+                                BorderThickness="0"
+                                Content="Добавить фильм"
+                                Foreground="White"
+                                FontSize="12"
+                                FontFamily="Montserrat"
+                                Cursor="Hand"
+                                Margin="0,100,0,0"
+                                Click="btnAddFilm_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"
+                                            Value="#462AD8" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="#FF67D167" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Width="150"
+                                            Height="40"
+                                            CornerRadius="20"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <!-- Список фильмов -->
+                        <ListView x:Name="filmsListView"
+                                  Width="550"
+                                  Background="Transparent"
+                                  SelectionChanged="OnSelectionChanged"
+                                  SelectionMode="Single"
+                                  BorderThickness="0"
+                                  HorizontalAlignment="Center"
+                                  Margin="10">
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="10"
+                                            Background="#33000000"
+                                            Margin="0,5"
+                                            Padding="10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100" />
+                                                <ColumnDefinition Width="310" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Grid.Column="0"
+                                                    x:Name="imageBtn"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Bottom"
+                                                    ToolTip="Нажмите, чтобы увеличить"
+                                                    BorderBrush="Transparent"
+                                                    Background="Transparent"
+                                                    Click="imageBtn_Click"
+                                                    Margin="0,0,0,10">
+
+                                                <Image x:Name="imagePoster"
+                                                       Source="{Binding Poster, Converter={StaticResource Base64ToImageConverter}}"
+                                                       Height="100"
+                                                       Stretch="Uniform"
+                                                       Width="100" />
+                                            </Button>
+
+                                            <!-- Информация о фильме -->
+                                            <StackPanel 
+                                                x:Name="infoStackPanel"
+                                                Grid.Column="1"
+                                                        Margin="10,0">
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontWeight="Bold"
+                                                           FontSize="16"
+                                                           Foreground="White" />
+                                                <TextBlock Text="{Binding Release_year, StringFormat='{}{0} г.'}"
+                                                           Foreground="LightGray" />
+                                                <TextBlock Text="{Binding Duration, StringFormat='{}{0} мин.'}"
+                                                           Foreground="LightGray" />
+                                                <TextBlock Text="{Binding Rating, StringFormat='Рейтинг: {0}/10'}"
+                                                           Foreground="LightGray" />
+                                                <TextBlock Text="{Binding Genres}"
+                                                           Foreground="LightGray"
+                                                           TextWrapping="Wrap" />
+
+                                 
+                                                <Button x:Name="emptyHeartBtn"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Bottom"
+                                                        ToolTip="Добавить в избранное"
+                                                        BorderBrush="Transparent"
+                                                        Background="Transparent"
+                                                        Click="EmptyHeartBtn_Click"
+                                                        Margin="0,0,0,10">
+                                                    <Image Source="/Images/Buttons/empty-heart.png"
+                                                           Height="35"
+                                                           Width="35" />
+                                                </Button>
+
+                                                <Button x:Name="fullHeartBtn"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Bottom"
+                                                        ToolTip="Удалить из избранного"
+                                                        BorderBrush="Transparent"
+                                                        Background="Transparent"
+                                                        Margin="0,0,0,10"
+                                                        Visibility="Collapsed"
+                                                        Click="FullHeartBtn_Click">
+                                                    <Image Source="/Images/Buttons/full-heart.png"
+                                                           Height="35"
+                                                           Width="35" />
+                                                </Button>
+                                            </StackPanel>
+                                            
+                                            
+
+                                            <!-- Кнопки действий -->
+                                            <StackPanel Grid.Column="2"
+                                                        VerticalAlignment="Center">
+                                                <Button Content="Подробнее"
+                                                        x:Name="fullViewBtn"
+                                                        Style="{StaticResource TextHighlightButtonStyle}"
+                                                        Click="ViewDetails_Click"
+                                                        IsEnabled="False"
+                                                        Tag="{Binding Id}" />
+                                                <Button Content="Опубликовать"
+                                                        x:Name="publishBtn"
+                                                        Style="{StaticResource TextHighlightButtonStyle}"
+                                                        Click="PublishFilms_Click"
+                                                        Tag="{Binding Id}"
+                                                        IsEnabled="False"
+                                                        Margin="0,5,0,0" />
+                                                <Button Content="Редактировать"
+                                                        x:Name="editBtn"
+                                                        Style="{StaticResource TextHighlightButtonStyle}"
+                                                        Click="EditFilm_Click"
+                                                        Tag="{Binding Id}"
+                                                        IsEnabled="False"
+                                                        Margin="0,5,0,0" />
+                                                <Button Content="Удалить"
+                                                        x:Name="deleteBtn"
+                                                        Style="{StaticResource TextHighlightButtonStyle}"
+                                                        Click="DeleteFilm_Click"
+                                                        Tag="{Binding Id}"
+                                                        IsEnabled="False"
+                                                        Margin="0,5,0,0" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Попап для отображения полной информации по фильму -->
+                <Popup x:Name="fullInfoPopup"
+                       Placement="Center"
+                       StaysOpen="True"
+                       Width="400"
+                       Height="500" 
+                       AllowsTransparency="True">
+                    <Border CornerRadius="10"
+                            Opacity="0.95"
+                            BorderThickness="2"
+                            Background="#2D2D30"
+                            BorderBrush="#FF7C4DFF"
+                            Padding="15">
+
+                        <!-- Градиентная рамка -->
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20"
+                                              ShadowDepth="0"
+                                              Color="#FF7C4DFF" />
+                        </Border.Effect>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Заголовок -->
+                            <TextBlock x:Name="popupTitle"
+                                       Grid.Row="0"
+                                       Text="{Binding Title}"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15" />
+
+                            <!-- Основное содержимое -->
+                            <ScrollViewer Grid.Row="1"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Margin="0,0,0,15">
+                                <StackPanel>
+                                    <!-- Постер и основная информация -->
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100" />
-                                            <ColumnDefinition Width="310" />
+                                            <ColumnDefinition Width="150" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                            
+                                        <Image x:Name="popapImagePoster"
+                                               Grid.Column="0"
+                                               Source="{Binding Poster, Converter={StaticResource Base64ToImageConverter}}"
+                                               Margin="0,0,10,0"
+                                               Height="100"
+                                               Stretch="Uniform"
+                                               Width="100" />
 
-                                        <Button Grid.Column="0"
-                                                x:Name="imageBtn"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Bottom"
-                                                ToolTip="Нажмите, чтобы увеличить"
-                                    
-                                                BorderBrush="Transparent"
-                                                Background="Transparent"
-                                                Click="imageBtn_Click"
-                                                Margin="0,0,0,10">
-
-                                            <Image x:Name="imagePoster"
-                                                   Source="{Binding Poster, Converter={StaticResource Base64ToImageConverter}}"
-                                                   Height="100"
-                                                   Stretch="Uniform"
-                                                   Width="100" />
-                                        </Button>
-
-                                        <!-- Информация о фильме -->
-                                        <StackPanel Grid.Column="1"
-                                                    Margin="10,0">
-                                            <TextBlock Text="{Binding Title}"
-                                                       FontWeight="Bold"
-                                                       FontSize="16"
-                                                       Foreground="White" />
-                                            <TextBlock Text="{Binding Year, StringFormat='{}{0} г.'}"
-                                                       Foreground="LightGray" />
-                                            <TextBlock Text="{Binding Duration, StringFormat='{}{0} мин.'}"
-                                                       Foreground="LightGray" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Year, StringFormat='Год: {0}'}"
+                                                       Foreground="White"
+                                                       Margin="0,0,0,5" />
+                                            <TextBlock Text="{Binding Duration, StringFormat='Длительность: {0} мин.'}"
+                                                       Foreground="White"
+                                                       Margin="0,0,0,5" />
+                                            
                                             <TextBlock Text="{Binding Rating, StringFormat='Рейтинг: {0}/10'}"
-                                                       Foreground="LightGray" />
-                                            <TextBlock Text="{Binding Genres}"
-                                                       Foreground="LightGray"
+                                                       Foreground="White"
+                                                       Margin="0,0,0,5" />
+                                            <TextBlock Text="{Binding Genres, StringFormat='Жанры: {0}'}"
+                                                       Foreground="White"
+                                                       Margin="0,0,0,5"
                                                        TextWrapping="Wrap" />
-                                        </StackPanel>
+                                            <TextBlock Text="{Binding Directors, StringFormat='Режиссер: {0}'}"
+                                                       Foreground="White"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,0,0,5" />
+                                            <TextBlock Text="{Binding Actors, StringFormat='Актеры: {0}'}"
+                                                       Foreground="White"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,0,0,5" />
 
-                                        <!-- Кнопки действий -->
-                                        <StackPanel Grid.Column="2"
-                                                    VerticalAlignment="Center">
-                                            <Button Content="Подробнее"
-                                                    x:Name="fullViewBtn"
-                                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                                    Click="ViewDetails_Click"
-                                                    IsEnabled="False"
-                                                    Tag="{Binding Id}" />
-                                            <Button Content="Опубликовать"
-                                                    x:Name="publishBtn"
-                                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                                    Click="PublishFilms_Click"
-                                                    Tag="{Binding Id}"
-                                                    IsEnabled="False"
-                                                    Margin="0,5,0,0" />
-                                            <Button Content="Редактировать"
-                                                    x:Name="editBtn"
-                                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                                    Click="EditFilm_Click"
-                                                    Tag="{Binding Id}"
-                                                    IsEnabled="False"
-                                                    Margin="0,5,0,0" />
-                                            <Button Content="Удалить"
-                                                    x:Name="deleteBtn"
-                                                    Style="{StaticResource TextHighlightButtonStyle}"
-                                                    Click="DeleteFilm_Click"
-                                                    Tag="{Binding Id}"
-                                                    IsEnabled="False"
-                                                    Margin="0,5,0,0" />
                                         </StackPanel>
                                     </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-            </ScrollViewer>
+
+                                    <!-- Описание -->
+                                    <TextBlock  Text="{Binding Description}"
+                                                Foreground="White"
+                                                Margin="0,15,0,0"
+                                                TextWrapping="Wrap"
+                                                FontSize="14" />
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <StackPanel Grid.Row="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom">
+                                <Button Content="Сохранить в PDF"
+                                        Width="120"
+                                        Margin="0,0,10,0"
+                                        Click="SaveToPdf_Click"
+                                        Style="{StaticResource ModernButtonStyle}"
+                                        ToolTip="Сохранить информацию о фильме в PDF" />
+                                <Button Content="Закрыть"
+                                        Width="120"
+                                        Click="CloseInfoPopup_Click"
+                                        Style="{StaticResource ModernButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Popup>
+            </Grid>
         </Border>
     </Border>
 </Page>

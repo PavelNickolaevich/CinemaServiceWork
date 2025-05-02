@@ -22,12 +22,13 @@ namespace CinemaServiceWork.Pages
     public partial class NewActorPage : Page
     {
         private CinemaEntities _context = new CinemaEntities();
-        public NewActorPage()
+        private Users _user;
+        public NewActorPage(Users user)
         {
             InitializeComponent();
             this.DataContext = AppConnect.cinemaEntities;
             listCountries.ItemsSource = AppConnect.cinemaEntities.Countries.ToList();
-
+            _user = user;
         }
 
         private void btnAddActor_Click(object sender, RoutedEventArgs e)

@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MessageBox = System.Windows.MessageBox;
 using CinemaServiceWork;
+using CinemaServiceWork.ApplicationData;
 
 namespace CinemaServiceWork.Pages
 {
@@ -34,63 +35,62 @@ namespace CinemaServiceWork.Pages
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            //var user = AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Nickname == txtUser.Text && u.Password == txtPass.Password);
+            var user = AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Nickname == txtUser.Text && u.Password == txtPass.Password);
 
-            //if (String.IsNullOrEmpty(txtUser.Text) || String.IsNullOrEmpty(txtPass.Password))
-            //{
-            //    MessageBox.Show(
-            //   "Введены не все данные",
-            //   "Уведомление",
-            //   MessageBoxButton.OK,
-            //   MessageBoxImage.Information
-            // );
+            if (String.IsNullOrEmpty(txtUser.Text) || String.IsNullOrEmpty(txtPass.Password))
+            {
+                MessageBox.Show(
+               "Введены не все данные",
+               "Уведомление",
+               MessageBoxButton.OK,
+               MessageBoxImage.Information
+             );
 
-            //}
+            }
 
+            else if (AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Nickname == txtUser.Text) == null)
+            {
+                MessageBox.Show(
+                "Такого пользовтаеля не существует",
+                "Уведомление",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+              );
 
+            }
 
-            //else if (AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Nickname == txtUser.Text) == null)
-            //{
-            //    MessageBox.Show(
-            //    "Такого пользовтаеля не существует",
-            //    "Уведомление",
-            //    MessageBoxButton.OK,
-            //    MessageBoxImage.Information
-            //  );
+            else if (AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Password == txtPass.Password) == null)
+            {
+                MessageBox.Show(
+                "Введен неверный пароль",
+                "Уведомление",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+              );
 
-            //}
+            }
 
-            //else if (AppConnect.cinemaEntities.Users.FirstOrDefault(u => u.Password == txtPass.Password) == null)
-            //{
-            //    MessageBox.Show(
-            //    "Введен неверный пароль",
-            //    "Уведомление",
-            //    MessageBoxButton.OK,
-            //    MessageBoxImage.Information
-            //  );
+            else if (user == null)
+            {
+                MessageBox.Show(
+                "Введен неверный пароль или ник",
+                "Уведомление",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+              );
 
-            //}
+            }
+            else
+            {
+                MessageBox.Show(
+               "Добро пожаловать",
+               "Уведомление",
+               MessageBoxButton.OK,
+               MessageBoxImage.Information
+             );
+                NavigationService.Navigate(new Pages.UserFilmsPage(user));
 
-            //else if (user == null)
-            //{
-            //    MessageBox.Show(
-            //    "Введен неверный пароль или ник",
-            //    "Уведомление",
-            //    MessageBoxButton.OK,
-            //    MessageBoxImage.Information
-            //  );
-
-            //} else
-            //{
-            //    MessageBox.Show(
-            //   "Добро пожаловать",
-            //   "Уведомление",
-            //   MessageBoxButton.OK,
-            //   MessageBoxImage.Information
-            // );
-            NavigationService.Navigate(new Pages.UserFilmsPage());
-
-            //     }
+            }
         }
 
 

@@ -22,6 +22,9 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Reflection;
 using Image = System.Windows.Controls.Image;
 using CinemaServiceWork.Utils.Converters;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using Xceed.Wpf.Toolkit;
 
 namespace CinemaServiceWork.Pages
 {
@@ -34,24 +37,24 @@ namespace CinemaServiceWork.Pages
         private string _posterImageData;
         private CinemaEntities _context = new CinemaEntities();
         private Movies _movie;
+        private Users _user;
 
 
-        public NewFilmPage()
+        public NewFilmPage(Users user)
         {
             InitializeComponent();
-            listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
-            listActors.ItemsSource = AppConnect.cinemaEntities.Actors.ToList();
-            listDirectors.ItemsSource = AppConnect.cinemaEntities.Directors.ToList();
+            LoadLists();
+            SetDefaultPoster();
+            _user = user;
         }
 
 
         public NewFilmPage(Movies movie)
         {
             InitializeComponent();
-     
-            listGenre.ItemsSource = AppConnect.cinemaEntities.Genres.ToList();
-            listActors.ItemsSource = AppConnect.cinemaEntities.Actors.ToList();
-            listDirectors.ItemsSource = AppConnect.cinemaEntities.Directors.ToList();
+            LoadLists();
+          //  _context = new CinemaEntities();
+         //   _movie = _context.Movies.Find(movie.MovieID);
 
             foreach (var actor in listActors.Items)
             {
@@ -70,20 +73,26 @@ namespace CinemaServiceWork.Pages
             }
 
             foreach (var genre in listGenre.Items)
+            {
+                if (genre is Genres g && movie.MoviesGenres.Any(mg => mg.GenreID == g.GenreID))
                 {
-                    if (genre is Genres g && movie.MoviesGenres.Any(mg => mg.GenreID == g.GenreID))
-                    {
-                        listGenre.SelectedItems.Add(genre);
-                    }
+                    listGenre.SelectedItems.Add(genre);
                 }
+            }
+
             DataContext = movie;
             _posterImageData = movie.Poster;
             _movie = movie;
+       
 
-            if (movie != null)
-            {
-                btnSaveFilm.Content = "Изменить";
-            }
+            btnSaveFilm.Content = movie != null ? "Изменить" : "Создать";
+        }
+
+        private void LoadLists()
+        {
+            listGenre.ItemsSource = _context.Genres.ToList();
+            listActors.ItemsSource = _context.Actors.ToList();
+            listDirectors.ItemsSource = _context.Directors.ToList();
         }
 
 
@@ -109,114 +118,207 @@ namespace CinemaServiceWork.Pages
 
         private void btnSaveBtnFilm_Click(object sender, RoutedEventArgs e)
         {
-            try
+            using (var transaction = _context.Database.BeginTransaction())
+                try
             {
                 // Валидация данных
-                if (string.IsNullOrWhiteSpace(txtName.Text) ||
-                    string.IsNullOrWhiteSpace(txtDescription.Text) ||
-                    string.IsNullOrWhiteSpace(txtYear.Text) ||
-                    string.IsNullOrWhiteSpace(txtDuration.Text) ||
-                    string.IsNullOrWhiteSpace(txtRating.Text) ||
-                    //    _posterImageData == null ||
-                    listGenre.SelectedItems.Count == 0)
-                {
-                    System.Windows.MessageBox.Show("Пожалуйста, заполните все поля и выберите хотя бы один жанр.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (!ValidateInput())
                     return;
-                }
 
+                // Обработка постера
                 if (_posterImageData == null)
                 {
-                    var imageUri = "/Images/poster-blank.png";
-                    Uri uri = new Uri("pack://application:,,," + imageUri, UriKind.Absolute);
-
-                    // Получаем поток ресурса
-                    var streamInfo = System.Windows.Application.GetResourceStream(uri);
-                    if (streamInfo == null)
-                    {
-                        throw new FileNotFoundException($"Resource not found: {imageUri}");
-                    }
-
-                    // Читаем байты
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        streamInfo.Stream.CopyTo(memoryStream);
-                        byte[] imageBytes = memoryStream.ToArray();
-                        _posterImageData = Convert.ToBase64String(imageBytes);
-                    }
-
+                    SetDefaultPoster();
                 }
 
-                // Проверка числовых полей
-                /*      if (!int.TryParse(txtYear.Text, out int year) ||
-                          !int.TryParse(txtDuration.Text, out int duration) ||
-                          !double.TryParse(txtRating.Text, out double rating) ||
-                          rating < 0 || rating > 10)
-                      {
-                          System.Windows.MessageBox.Show("Пожалуйста, проверьте правильность ввода числовых полей. Рейтинг должен быть от 0 до 10.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                          return;
-                      }*/
-
+                // Сохранение фильма
                 if (_movie == null)
                 {
-                    {
-
-
-                        // Создание нового фильма
-                        var newFilm = new Movies
-                        {
-                            Title = txtName.Text,
-                            Description = txtDescription.Text,
-                            Release_year = Convert.ToInt32(txtYear.Text),
-                            Duration = Convert.ToInt32(txtDuration.Text),
-                            Rating = Convert.ToDecimal(txtRating.Text),
-                            Poster = _posterImageData as string
-                        };
-
-                        //Добавление жанров
-                        foreach (Genres selectedGenre in listGenre.SelectedItems)
-                        {
-                            newFilm.MoviesGenres.Add(new MoviesGenres
-                            {
-                                MovieID = newFilm.MovieID,
-                                GenreID = selectedGenre.GenreID
-                            });
-                        }
-
-                        //Добавление актеров
-                        foreach (Actors selectedActors in listActors.SelectedItems)
-                        {
-                            newFilm.MoviesActors.Add(new MoviesActors
-                            {
-                                MoviesID = newFilm.MovieID,
-                                ActorsID = selectedActors.ActorID
-                            });
-                        }
-
-                        //Добавление режиссеров
-                        foreach (Directors selectedDirectors in listDirectors.SelectedItems)
-                        {
-                            newFilm.MoviesDirectors.Add(new MoviesDirectors
-                            {
-                                MoviesID = newFilm.MovieID,
-                                DirectorsID = selectedDirectors.DirectorID
-                            });
-                        }
-
-                        _context.Movies.Add(newFilm);
-                    }
-                } else
-                {
-
+                    CreateNewMovie();
                 }
-
+                else
+                {
+                    UpdateExistingMovie();
+                }
+              
                 _context.SaveChanges();
-
-                System.Windows.MessageBox.Show("Фильм успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    transaction.Commit();
+                    System.Windows.MessageBox.Show("Фильм успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 ClearFields();
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show($"Произошла ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtName.Text) ||
+                string.IsNullOrWhiteSpace(txtDescription.Text) ||
+                string.IsNullOrWhiteSpace(txtYear.Text) ||
+                string.IsNullOrWhiteSpace(txtDuration.Text) ||
+                string.IsNullOrWhiteSpace(txtRating.Text) ||
+                listGenre.SelectedItems.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Пожалуйста, заполните все поля и выберите хотя бы один жанр.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (!int.TryParse(txtYear.Text, out int year) || year < 1888 || year > DateTime.Now.Year + 5)
+            {
+                System.Windows.MessageBox.Show($"Год выпуска должен быть числом от 1888 до {DateTime.Now.Year + 5}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (!int.TryParse(txtDuration.Text, out int duration) || duration <= 0 || duration > 1000)
+            {
+                System.Windows.MessageBox.Show("Длительность должна быть положительным числом (в минутах) не более 1000", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (!decimal.TryParse(txtRating.Text, out decimal rating) || rating < 0 || rating > 10)
+            {
+                System.Windows.MessageBox.Show("Рейтинг должен быть числом от 0 до 10", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void SetDefaultPoster()
+        {
+            var imageUri = "/Images/poster-blank.png";
+            Uri uri = new Uri("pack://application:,,," + imageUri, UriKind.Absolute);
+
+            var streamInfo = System.Windows.Application.GetResourceStream(uri);
+            if (streamInfo == null)
+            {
+                throw new FileNotFoundException($"Resource not found: {imageUri}");
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                streamInfo.Stream.CopyTo(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray();
+                _posterImageData = Convert.ToBase64String(imageBytes);
+            }
+        }
+
+        private void CreateNewMovie()
+        {
+            var newFilm = new Movies
+            {
+                Title = txtName.Text,
+                Description = txtDescription.Text,
+                Release_year = Convert.ToInt32(txtYear.Text),
+                Duration = Convert.ToInt32(txtDuration.Text),
+                Rating = Convert.ToDecimal(txtRating.Text),
+                Poster = _posterImageData as string
+            };
+
+            AddRelatedEntities(newFilm);
+            _context.Movies.Add(newFilm);
+        }
+
+        private void UpdateExistingMovie()
+        {
+            _movie.Title = txtName.Text;
+            _movie.Description = txtDescription.Text;
+            _movie.Release_year = Convert.ToInt32(txtYear.Text);
+            _movie.Duration = Convert.ToInt32(txtDuration.Text);
+            _movie.Rating = Convert.ToDecimal(txtRating.Text);
+            _movie.Poster = _posterImageData as string;
+
+            _context.Movies.AddOrUpdate(_movie);
+            UpdateRelatedEntities(_movie);
+
+        }
+
+        private void AddRelatedEntities(Movies movie)
+        {
+            foreach (Genres selectedGenre in listGenre.SelectedItems)
+            {
+                movie.MoviesGenres.Add(new MoviesGenres
+                {
+                    MovieID = movie.MovieID,
+                    GenreID = selectedGenre.GenreID
+                });
+            }
+
+            foreach (Actors selectedActors in listActors.SelectedItems)
+            {
+                movie.MoviesActors.Add(new MoviesActors
+                {
+                    MoviesID = movie.MovieID,
+                    ActorsID = selectedActors.ActorID
+                });
+            }
+
+            foreach (Directors selectedDirectors in listDirectors.SelectedItems)
+            {
+                movie.MoviesDirectors.Add(new MoviesDirectors
+                {
+                    MoviesID = movie.MovieID,
+                    DirectorsID = selectedDirectors.DirectorID
+                });
+            }
+        }
+
+        private void UpdateRelatedEntities(Movies movie)
+        {
+            var selectedGenreIds = listGenre.SelectedItems.Cast<Genres>().Select(g => g.GenreID).ToList();
+            var existingGenres = _context.MoviesGenres.Where(mg => mg.MovieID == movie.MovieID).ToList();
+            var selectedActorsIds = listActors.SelectedItems.Cast<Actors>().Select(g => g.ActorID).ToList();
+            var existingActors = _context.MoviesActors.Where(ma => ma.MoviesID == movie.MovieID).ToList();
+            var selectedDirectorsIds = listDirectors.SelectedItems.Cast<Directors>().Select(g => g.DirectorID).ToList();
+            var existingDirectors = _context.MoviesDirectors.Where(md => md.MoviesID == movie.MovieID).ToList();
+
+            
+            // Удаляем невыбранные
+            foreach (var genre in existingGenres.Where(g => !selectedGenreIds.Contains(g.GenreID)))
+            {
+                _context.MoviesGenres.Remove(genre);
+            }
+
+            // Добавляем новые
+            foreach (var genreId in selectedGenreIds.Except(existingGenres.Select(g => g.GenreID)))
+            {
+                _context.MoviesGenres.AddOrUpdate(new MoviesGenres
+                {
+                    MovieID = movie.MovieID,
+                    GenreID = genreId
+                });
+            }
+
+            // актеры
+            foreach (var actor in existingActors.Where(a => !selectedActorsIds.Contains(a.ActorsID)))
+            {
+                _context.MoviesActors.Remove(actor);
+            }
+
+            foreach (var actorId in selectedActorsIds.Except(existingActors.Select(a => a.ActorsID)))
+            {
+                _context.MoviesActors.AddOrUpdate(new MoviesActors
+                {
+                    MoviesID = movie.MovieID,
+                    ActorsID = actorId
+                });
+            }
+
+            // режиссеры
+            foreach (var director in existingDirectors.Where(d => !selectedDirectorsIds.Contains(d.DirectorsID)))
+            {
+                _context.MoviesDirectors.Remove(director);
+            }
+
+            foreach (var directorId in selectedDirectorsIds.Except(existingDirectors.Select(d => d.DirectorsID)))
+            {
+                _context.MoviesDirectors.AddOrUpdate(new MoviesDirectors
+                {
+                    MoviesID = movie.MovieID,
+                    DirectorsID = directorId
+                });
             }
         }
 
@@ -267,5 +369,6 @@ namespace CinemaServiceWork.Pages
         {
 
         }
+
     }
 }

@@ -1,21 +1,20 @@
 ﻿using CinemaServiceWork.ApplicationData;
 using CinemaServiceWork.Utils;
+using QRCoder;
 using System;
-using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
+using ZXing;
+using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
+using Image = System.Windows.Controls.Image;
 
 namespace CinemaServiceWork.Pages
 {
@@ -35,7 +34,6 @@ namespace CinemaServiceWork.Pages
         }
         private void btnRegistration_Click(object sender, RoutedEventArgs e)
         {
-
             if (String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtEmail.Text) || String.IsNullOrEmpty(txtSurname.Text)
                    || String.IsNullOrEmpty(txtRptPassword.Password)
                    || String.IsNullOrWhiteSpace(txtRptPassword.Password)
@@ -59,19 +57,24 @@ namespace CinemaServiceWork.Pages
                     Last_name = txtSurname.Text,
                     Nickname = txtNickName.Text,
                     Birth_of_date = datePicker.SelectedDate,
-                    Password = txtEmail.Text,
+                    Password = txtPassword.Password, // Исправлено: было txtEmail.Text
                     Email = txtEmail.Text
                 };
 
                 AppConnect.cinemaEntities.Users.Add(user);
                 AppConnect.cinemaEntities.SaveChanges();
+
+                // Генерируем данные для QR-кода (можно использовать ID, email или комбинацию данных)
+                string qrData = $"UserID:{user.UserID};Email:{user.Email}";
+                ShowQRCode(qrData);
+
                 MessageBox.Show(
-                    "Данные успешно добавлены",
+                    "Данные успешно добавлены. Ваш QR-код сгенерирован ниже.",
                     "Уведомление",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
                     );
-                AppFrame.mainFrame.GoBack();
+                // Не возвращаемся сразу назад, чтобы пользователь мог увидеть QR-код
             }
         }
 
@@ -304,5 +307,43 @@ namespace CinemaServiceWork.Pages
             eyeBtn.IsEnabled = true;
 
         }
+
+        // In your registration button click handler or after successful registration
+        private void ShowQRCode(string userData)
+        {
+            // Generate QR code
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new ZXing.Common.EncodingOptions
+                {
+                    Width = 300,
+                    Height = 300,
+                    Margin = 0
+                }
+            };
+
+            var bitmap = writer.Write(userData);
+
+            // Convert to BitmapImage
+            using (var memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+
+                qrCodeImage.Source = bitmapImage;
+            }
+
+            qrCodeText.Text = userData; // Or any other text you want to display
+            qrCodeBorder.Visibility = Visibility.Visible;
+        }
+
+
     }
 }

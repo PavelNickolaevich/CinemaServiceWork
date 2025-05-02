@@ -23,11 +23,13 @@ namespace CinemaServiceWork.Pages
     {
 
         private CinemaEntities _context = new CinemaEntities();
-        public NewDirectorPage()
+        private Users user;
+        public NewDirectorPage(Users user)
         {
             InitializeComponent();
             this.DataContext = AppConnect.cinemaEntities;
             listCountries.ItemsSource = AppConnect.cinemaEntities.Countries.ToList();
+            this.user = user;   
         }
 
         private void btnAddDirector_Click(object sender, RoutedEventArgs e)

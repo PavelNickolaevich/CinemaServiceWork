@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cinema-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"
+      MSSQL_PID: "Express"  # Developer, Express, Standard, Enterprise
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+      - ./sql-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong@Passw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cinema-app:
+    build: .
+    container_name: cinema-service
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    ports:
+      - "5000:80"
+    environment:
+      - DB_HOST=sql-server
+      - DB_PORT=1433
+      - DB_NAME=CinemaDB
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrong@Passw0rd
+    restart: unless-stopped
+
+volumes:
+  sql-data:

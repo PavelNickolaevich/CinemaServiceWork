@@ -1,10 +1,12 @@
 ﻿<Application x:Class="CinemaServiceWork.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CinemaServiceWork"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
+
+
 
         <Style x:Key="regTextBlock"
                TargetType="TextBlock">
@@ -300,6 +302,289 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+        <Style x:Key="FilterComboBoxStyle"
+               TargetType="ComboBox">
+            <Setter Property="Background"
+                    Value="#1AFFFFFF" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="BorderBrush"
+                    Value="#FF7C4DFF" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="Width"
+                    Value="150" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Grid.Column="2"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="Transparent" />
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="3" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                <Path x:Name="arrow"
+                                      Grid.Column="1"
+                                      Fill="White"
+                                      Data="M0,0 L5,5 L10,0 Z"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RenderTransformOrigin="0.5,0.5">
+                                    <Path.RenderTransform>
+                                        <RotateTransform Angle="0" />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+
+                            <!-- Невидимая кнопка, которая открывает список -->
+                            <ToggleButton x:Name="toggleButton"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Style>
+                                    <Style TargetType="{x:Type ToggleButton}">
+                                        <Setter Property="Background"
+                                                Value="Transparent" />
+                                        <Setter Property="BorderBrush"
+                                                Value="Transparent" />
+                                        <Setter Property="BorderThickness"
+                                                Value="0" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <!-- Убираем все визуальные эффекты при наведении -->
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver"
+                                                     Value="True">
+                                                <Setter Property="Background"
+                                                        Value="Transparent" />
+                                                <Setter Property="BorderBrush"
+                                                        Value="Transparent" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed"
+                                                     Value="True">
+                                                <Setter Property="Background"
+                                                        Value="Transparent" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+
+                            <!-- Выпадающий список -->
+                            <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   Placement="Bottom"
+                                   Focusable="False"
+                                   IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                   PopupAnimation="Fade">
+                                <Border x:Name="dropDownBorder"
+                                        Background="#FF2D2D30"
+                                        BorderBrush="#FF7C4DFF"
+                                        BorderThickness="1"
+                                        CornerRadius="3"
+                                        MinWidth="{TemplateBinding ActualWidth}">
+                                    <ScrollViewer MaxHeight="200">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="BorderBrush"
+                                        Value="#FFB388FF" />
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="#33000000" />
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen"
+                                     Value="True">
+                                <Setter TargetName="arrow"
+                                        Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="180" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="border"
+                                        Property="BorderBrush"
+                                        Value="#FFB388FF" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter TargetName="border"
+                                        Property="Opacity"
+                                        Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Resources>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                    <Setter Property="Foreground"
+                            Value="White" />
+                    <Setter Property="Padding"
+                            Value="5" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ComboBoxItem">
+                                <Border x:Name="border"
+                                        Background="{TemplateBinding Background}"
+                                        BorderThickness="0"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted"
+                                             Value="True">
+                                        <Setter TargetName="border"
+                                                Property="Background"
+                                                Value="#FF512DA8" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled"
+                                             Value="False">
+                                        <Setter TargetName="border"
+                                                Property="Opacity"
+                                                Value="0.5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <!--Поле поиска-->
+        <Style x:Key="FilterTextBoxStyle"
+               TargetType="TextBox">
+            <Setter Property="Background"
+                    Value="#1AFFFFFF" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="BorderBrush"
+                    Value="#FF7C4DFF" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="Width"
+                    Value="250" />
+            <Setter Property="Height"
+                    Value="32" />
+            <Setter Property="Padding"
+                    Value="8,5" />
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="CaretBrush"
+                    Value="#FFB388FF" />
+            <Setter Property="SelectionBrush"
+                    Value="#557C4DFF" />
+            <Setter Property="TextWrapping"
+                    Value="NoWrap" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="BorderBrush"
+                                        Value="#FFB388FF" />
+                                <Setter Property="Background"
+                                        Value="#33000000" />
+                            </Trigger>
+                            <Trigger Property="IsFocused"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="BorderBrush"
+                                        Value="#FFB388FF" />
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="#442D2D30" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter TargetName="border"
+                                        Property="Opacity"
+                                        Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+ 
 
 
 

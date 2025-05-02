@@ -73,6 +73,7 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0"
@@ -102,6 +103,14 @@
                     <TextBlock Grid.Row="10"
                                Text="Постер фильма"
                                Style="{StaticResource addTextBlock}" />
+                    <Image x:Name="qrCodeImageControl"
+                           Grid.Row="11"
+                           Grid.Column="1"
+                           Width="150"
+                           Height="150"
+                           Visibility="Collapsed"
+                           Margin="0,20,0,0"
+                           HorizontalAlignment="Center" />
 
 
                     <TextBox x:Name="txtName"
@@ -143,6 +152,7 @@
                                 <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                       
                         
                     </ListBox>
                     <ListBox Grid.Row="7"
@@ -180,9 +190,10 @@
                             <DataTemplate>
                                 <TextBlock>
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} {1} ({2})">
+                                        <MultiBinding StringFormat="{}{0} {1} {2} ({3})">
                                             <Binding Path="First_name" />
                                             <Binding Path="Last_name" />
+                                            <Binding Path="Patronymic" />
                                             <Binding Path="Countries.Name" />
                                         </MultiBinding>
                                     </TextBlock.Text>
