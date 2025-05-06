@@ -30,6 +30,11 @@ using Path = System.IO.Path;
 using Image = System.Windows.Controls.Image;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
+using System.Windows.Controls.Primitives;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
+using System.Diagnostics;
+using Control = System.Windows.Forms.Control;
 
 namespace CinemaServiceWork.Pages
 {
@@ -49,6 +54,7 @@ namespace CinemaServiceWork.Pages
 
         public MyFilmsPage(Users user)
         {
+            _user = user;
             _films = new ObservableCollection<Movies>(AppConnect.cinemaEntities.Movies.ToList());
             InitializeComponent();
             LoadFilms();
@@ -57,7 +63,8 @@ namespace CinemaServiceWork.Pages
             isInitFilter = true;
             AddGenres();
             AddYears();
-            _user = user;
+            LoadFavorite();
+
         }
 
         private ObservableCollection<Movies> Movies()
@@ -97,6 +104,7 @@ namespace CinemaServiceWork.Pages
 
         private void LoadFilms()
         {
+       
             foreach (var film in this._films)
            {
                 film.Genres = string.Join(", ", film.MoviesGenres.Select(mg => mg.Genres.Name));
@@ -152,8 +160,84 @@ namespace CinemaServiceWork.Pages
                       })
                       .DefaultIfEmpty("Режиссер не указан"));
             }
+
             filmsListView.ItemsSource = this._films;
+
         }
+
+
+       private void LoadFavorite()
+        {
+
+            var favoriteMovieIds = _context.Favorites
+                   .Where(f => f.UserID == _user.UserID)
+                   .Select(f => f.MovieID)
+                   .ToList();
+
+            foreach (var film in _films)
+            {
+                if (favoriteMovieIds.Contains(film.MovieID))
+                {
+                    // Если фильм в избранном, показываем заполненное сердечко
+                    UpdateHeartButtons(film, true);
+                    
+                }
+            }
+
+        }
+
+        private void UpdateHeartButtons(Movies film, bool isFavorite)
+        {
+            if (filmsListView == null) return;
+
+            // Ждем, пока элементы будут готовы
+            if (filmsListView.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+            {
+                filmsListView.ItemContainerGenerator.StatusChanged += (s, e) =>
+                {
+                    if (filmsListView.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+                    {
+                        UpdateHeartButtons(film, isFavorite);
+                    }
+                };
+                return;
+            }
+
+            // Получаем контейнер элемента ListView
+            var container = filmsListView.ItemContainerGenerator.ContainerFromItem(film) as ListViewItem;
+            if (container == null) return;
+
+            // Ищем StackPanel в визуальном дереве
+            var stackPanel = FindVisualChild<StackPanel>(container);
+            if (stackPanel == null) return;
+
+            // Находим кнопки
+            var emptyHeart = stackPanel.FindName("emptyHeartBtn") as Button;
+            var fullHeart = stackPanel.FindName("fullHeartBtn") as Button;
+
+            if (emptyHeart != null && fullHeart != null)
+            {
+                emptyHeart.Visibility = isFavorite ? Visibility.Collapsed : Visibility.Visible;
+                fullHeart.Visibility = isFavorite ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        // Вспомогательный метод для поиска дочерних элементов
+        private T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is T)
+                    return (T)child;
+
+                var childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                    return childOfChild;
+            }
+            return null;
+        }
+
 
         public void ForceRefresh()
         {
@@ -243,15 +327,31 @@ namespace CinemaServiceWork.Pages
 
         private void FullHeartBtn_Click(object sender, RoutedEventArgs e)
         {
-            var fullHeartBtn = (Button)sender;
-            var film = (Movies)fullHeartBtn.DataContext;
+            try
+            {
+                var fullHeartBtn = (Button)sender;
+                var film = (Movies)fullHeartBtn.DataContext;
 
-            fullHeartBtn.Visibility = Visibility.Collapsed;
-            var parent = (FrameworkElement)fullHeartBtn.Parent;
-            var emptyHeartBtn = (Button)parent.FindName("emptyHeartBtn");
-            emptyHeartBtn.Visibility = Visibility.Visible;
+                fullHeartBtn.Visibility = Visibility.Collapsed;
+                var parent = (FrameworkElement)fullHeartBtn.Parent;
+                var emptyHeartBtn = (Button)parent.FindName("emptyHeartBtn");
+                emptyHeartBtn.Visibility = Visibility.Visible;
+       
+                var favorite = _context.Favorites
+                    .FirstOrDefault(f => f.UserID == _user.UserID && f.MovieID == film.MovieID);
 
-        }
+                if (favorite != null)
+                {
+                    _context.Favorites.Remove(favorite);
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+    }
 
         private void SortByName_Click(object sender, RoutedEventArgs e)
 
@@ -386,11 +486,6 @@ namespace CinemaServiceWork.Pages
             {
                 NavigationService.Navigate(new Pages.NewFilmPage(movie));
             }
-        }
-
-        private void PublishFilms_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.GoBack();
         }
 
         private void ViewDetails_Click(object sender, RoutedEventArgs e)
@@ -685,6 +780,161 @@ namespace CinemaServiceWork.Pages
             {
                 MessageBox.Show($"Ошибка при сбросе фильтров: {ex.Message}",
                               "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CancelPublishFilm_Click(object sender, RoutedEventArgs e)
+        {
+            PublishFilmPopup.IsOpen = false;
+            txtTitle.Text = string.Empty;
+            txtMessage.Text = string.Empty;
+        }
+
+        private void PublishFilms_Click(object sender, RoutedEventArgs e)
+        {
+            var film = filmsListView.SelectedItem as Movies;
+
+            if (film != null)
+            {
+                PublishFilmPopup.IsOpen = true;
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите фильм для публикации",
+                              "Предупреждение",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Warning);
+            }
+        }
+
+
+        //private void PublishFilm_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (string.IsNullOrWhiteSpace(txtTitle.Text))
+        //    {
+        //        errorTxt.Visibility = Visibility.Visible;
+        //        errorTxt.Text = "Пожалуйста, заполните заголовок";
+        //        errorTxt.Foreground = Brushes.Red;
+
+        //        txtTitle.Focus();
+        //        return;
+        //    }
+
+        //    errorTxt.Visibility = Visibility.Collapsed;
+
+        //    var film = filmsListView.SelectedItem as Movies;
+
+        //    FilmPublishings filmPublishing = new FilmPublishings
+        //    {
+        //        MovieID = film.MovieID,
+        //        Status = "Published",
+        //        PublishDate = DateTime.Now
+        //    };
+
+        //    _context.FilmPublishings.Add(filmPublishing);
+        //    _context.SaveChanges();
+
+        //    Discussions discussion = new Discussions
+        //    {
+        //        PublishID = filmPublishing.PublishID,
+        //        UserID = _user.UserID,
+        //        Title = txtTitle.Text,
+        //        Message = txtMessage.Text
+        //    };
+
+        //    _context.Discussions.Add(discussion);
+        //    _context.SaveChanges();
+
+        //    PublishFilmPopup.IsOpen = false;
+        //    txtMessage.Text = "";
+        //    txtTitle.Text = "";
+
+        //    MessageBox.Show($"Фильм '{film.Title}' успешно опубликован!",
+        //                  "Успех",
+        //                  MessageBoxButton.OK,
+        //                  MessageBoxImage.Information);
+          
+
+        //}
+
+        private void PublishFilm_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtTitle.Text))
+                {
+                    errorTxt.Visibility = Visibility.Visible;
+                    errorTxt.Text = "Пожалуйста, заполните заголовок";
+                    errorTxt.Foreground = Brushes.Red;
+
+                    txtTitle.Focus();
+                    return;
+                }
+
+                var film = filmsListView.SelectedItem as Movies;
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                       
+                        var filmPublishing = new FilmPublishings
+                        {
+                            MovieID = film.MovieID,
+                            Status = "Published",
+                            PublishDate = DateTime.Now
+                        };
+
+                        _context.FilmPublishings.Add(filmPublishing);
+                        _context.SaveChanges();
+
+                        var discussion = new Discussions
+                        {
+                            PublishID = filmPublishing.PublishID,
+                            UserID = _user.UserID,
+                            Title = txtTitle.Text,
+                            Message = txtMessage.Text,
+                        };
+
+                        _context.Discussions.Add(discussion);
+                        _context.SaveChanges();
+
+                        transaction.Commit();
+
+                        PublishFilmPopup.IsOpen = false;
+                        txtTitle.Text = string.Empty;
+                        txtMessage.Text = string.Empty;
+                        errorTxt.Visibility = Visibility.Collapsed;
+
+                        MessageBox.Show($"Фильм '{film.Title}' успешно опубликован с обсуждением!",
+                                      "Успех",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        ShowError($"Ошибка при сохранении данных: {ex.Message}");
+                        Debug.WriteLine($"Transaction error: {ex}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Неожиданная ошибка: {ex.Message}");
+                Debug.WriteLine($"Publish error: {ex}");
+            }
+        }
+
+        private void ShowError(string message, Control focusControl = null)
+        {
+            errorTxt.Visibility = Visibility.Visible;
+            errorTxt.Text = message;
+            errorTxt.Foreground = Brushes.Red;
+
+            if (focusControl != null)
+            {
+                focusControl.Focus();
             }
         }
     }

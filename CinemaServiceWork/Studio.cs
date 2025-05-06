@@ -7,18 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class MoviesCountries
+    public partial class Studio
     {
-        public int MovieCountryID { get; set; }
-        public int MovieID { get; set; }
-        public int CountryID { get; set; }
+        public int StudioID { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> CountryID { get; set; }
     
         public virtual Countries Countries { get; set; }
-        public virtual Movies Movies { get; set; }
     }
 }

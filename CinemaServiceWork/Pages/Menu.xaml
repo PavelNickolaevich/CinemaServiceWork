@@ -59,6 +59,7 @@
                         Margin="10"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
+                        Click="ForumBtn_Click"
                         Height="30" />
 
                 <Button Content="Добавить фильм"

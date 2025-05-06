@@ -64,17 +64,15 @@ namespace CinemaServiceWork.Pages
                 AppConnect.cinemaEntities.Users.Add(user);
                 AppConnect.cinemaEntities.SaveChanges();
 
-                // Генерируем данные для QR-кода (можно использовать ID, email или комбинацию данных)
-                string qrData = $"UserID:{user.UserID};Email:{user.Email}";
-                ShowQRCode(qrData);
-
                 MessageBox.Show(
-                    "Данные успешно добавлены. Ваш QR-код сгенерирован ниже.",
+                    "Данные успешно добавлены.",
                     "Уведомление",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
                     );
-                // Не возвращаемся сразу назад, чтобы пользователь мог увидеть QR-код
+
+                AppFrame.contentFrame.Navigate(new AuthorizationPage());
+
             }
         }
 
@@ -307,43 +305,6 @@ namespace CinemaServiceWork.Pages
             eyeBtn.IsEnabled = true;
 
         }
-
-        // In your registration button click handler or after successful registration
-        private void ShowQRCode(string userData)
-        {
-            // Generate QR code
-            var writer = new BarcodeWriter
-            {
-                Format = BarcodeFormat.QR_CODE,
-                Options = new ZXing.Common.EncodingOptions
-                {
-                    Width = 300,
-                    Height = 300,
-                    Margin = 0
-                }
-            };
-
-            var bitmap = writer.Write(userData);
-
-            // Convert to BitmapImage
-            using (var memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                memory.Position = 0;
-
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-
-                qrCodeImage.Source = bitmapImage;
-            }
-
-            qrCodeText.Text = userData; // Or any other text you want to display
-            qrCodeBorder.Visibility = Visibility.Visible;
-        }
-
 
     }
 }

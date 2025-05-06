@@ -588,6 +588,106 @@
                         </Grid>
                     </Border>
                 </Popup>
+
+                <Popup x:Name="PublishFilmPopup"
+                       Placement="Center"
+                       StaysOpen="True"
+                       Width="400"
+                       Height="300"
+                       AllowsTransparency="True">
+                    <Border CornerRadius="10"
+                            Opacity="0.95"
+                            BorderThickness="2"
+                            Background="#2D2D30"
+                            BorderBrush="#FF7C4DFF"
+                            Padding="15">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20"
+                                              ShadowDepth="0"
+                                              Color="#FF7C4DFF" />
+                        </Border.Effect>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="popupPublishTitle"
+                                       Grid.Row="0"
+                                       Text="Публикация фильма"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,20" />
+                            
+                            <Grid Grid.Row="1"
+                                  Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Заголовок:"
+                                           Style="{StaticResource regTextBlock}"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0" />
+
+                                <TextBox x:Name="txtTitle"
+                                         Grid.Column="1"
+                                         Style="{StaticResource regTextBox}" />
+                            </Grid>
+
+                            <Grid Grid.Row="2"
+                                  Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Сообщение:"
+                                           Style="{StaticResource regTextBlock}"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0" />
+
+                                <TextBox x:Name="txtMessage"
+                                         Grid.Column="1"
+                                         Style="{StaticResource regTextBox}" />
+                            </Grid>
+
+
+                            <StackPanel Grid.Row="3">
+
+                                <TextBlock 
+                                    x:Name="errorTxt"
+                                  
+                                           Visibility="Collapsed"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="4"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom">
+                                <Button Content="Опубликовать"
+                                        Width="120"
+                                        Margin="0,0,10,0"
+                                        Click="PublishFilm_Click"
+                                        Style="{StaticResource ModernButtonStyle}" />
+                                <Button Content="Закрыть"
+                                        Width="120"
+                                        Click="CancelPublishFilm_Click"
+                                        Style="{StaticResource ModernButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Popup>
             </Grid>
         </Border>
     </Border>

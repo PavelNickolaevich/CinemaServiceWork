@@ -60,10 +60,8 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <!-- New row for QR code -->
                 </Grid.RowDefinitions>
 
-                <!-- Existing controls remain the same -->
                 <TextBlock Grid.Row="0"
                            Text="Имя"
                            Style="{StaticResource regTextBlock}" />
@@ -168,40 +166,6 @@
                            Height="35"
                            Width="35" />
                 </Button>
-
-                <!-- QR Code Section -->
-                <Border Grid.Row="8"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="3"
-                        Margin="0,20"
-                        HorizontalAlignment="Center"
-                        BorderBrush="#462AD8"
-                        BorderThickness="2"
-                        CornerRadius="5"
-                        Padding="10"
-                        Visibility="Collapsed"
-                        x:Name="qrCodeBorder">
-                    <StackPanel>
-                        <TextBlock Text="Ваш QR код для входа:"
-                                   HorizontalAlignment="Center"
-                                   FontFamily="Montserrat"
-                                   FontSize="14"
-                                   Foreground="White"
-                                   Margin="0,0,0,10" />
-                        <Image x:Name="qrCodeImage"
-                               Width="150"
-                               Height="150"
-                               Stretch="Uniform" />
-                        <TextBlock x:Name="qrCodeText"
-                                   HorizontalAlignment="Center"
-                                   FontFamily="Montserrat"
-                                   FontSize="12"
-                                   Foreground="White"
-                                   Margin="0,10,0,0"
-                                   TextWrapping="Wrap"
-                                   MaxWidth="300" />
-                    </StackPanel>
-                </Border>
 
                 <Grid Grid.Column="1"
                       Grid.Row="7">

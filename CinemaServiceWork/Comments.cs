@@ -7,18 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class MoviesDirectors
+    public partial class Comments
     {
-        public int MoviesDirectorsID { get; set; }
-        public int MoviesID { get; set; }
-        public int DirectorsID { get; set; }
+        public int CommentID { get; set; }
+        public int DiscussionID { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public string Contenting { get; set; }
     
-        public virtual Directors Directors { get; set; }
-        public virtual Movies Movies { get; set; }
+        public virtual Discussions Discussions { get; set; }
+        public virtual Users Users { get; set; }
+        public int CommentCount { get; set; }
+
+        public int CurrentUserComCount { get; set; }
     }
 }

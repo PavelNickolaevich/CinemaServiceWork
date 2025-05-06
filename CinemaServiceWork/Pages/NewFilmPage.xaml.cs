@@ -213,7 +213,7 @@ namespace CinemaServiceWork.Pages
                 Description = txtDescription.Text,
                 Release_year = Convert.ToInt32(txtYear.Text),
                 Duration = Convert.ToInt32(txtDuration.Text),
-                Rating = Convert.ToDecimal(txtRating.Text),
+                Rating = Convert.ToInt32(txtRating.Text),
                 Poster = _posterImageData as string
             };
 
@@ -227,7 +227,7 @@ namespace CinemaServiceWork.Pages
             _movie.Description = txtDescription.Text;
             _movie.Release_year = Convert.ToInt32(txtYear.Text);
             _movie.Duration = Convert.ToInt32(txtDuration.Text);
-            _movie.Rating = Convert.ToDecimal(txtRating.Text);
+            _movie.Rating = Convert.ToInt32(txtRating.Text);
             _movie.Poster = _posterImageData as string;
 
             _context.Movies.AddOrUpdate(_movie);

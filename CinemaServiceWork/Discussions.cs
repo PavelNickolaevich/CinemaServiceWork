@@ -7,26 +7,33 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class FilmPublishings
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class Discussions
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FilmPublishings()
+        public Discussions()
         {
-            this.Discussions = new HashSet<Discussions>();
+            this.Comments = new HashSet<Comments>();
         }
-    
+
+        [Key]
+        public int DiscussionID { get; set; }
         public int PublishID { get; set; }
-        public int MovieID { get; set; }
-        public string Status { get; set; }
-        public byte[] PublishDate { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Discussions> Discussions { get; set; }
-        public virtual Movies Movies { get; set; }
+        public virtual ICollection<Comments> Comments { get; set; }
+        public virtual FilmPublishings FilmPublishings { get; set; }
+        public virtual Users Users { get; set; }
+
+        public int CommentCount { get; set; }
+        public int CurrentUserComCount { get; set; }
     }
 }

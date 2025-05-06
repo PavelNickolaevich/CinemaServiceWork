@@ -10,8 +10,7 @@
       d:DesignWidth="600"
       Title="FavoritePage">
     <Page.Resources>
-      
-            <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+        <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
       </Page.Resources>
 
     <Border CornerRadius="10"
@@ -39,43 +38,6 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Visibility="Collapsed" />
-
-                        <!--<Button x:Name="BtnAddFilms"
-                                Grid.Column="1"
-                                BorderThickness="0"
-                                Content="Добавить фильм"
-                                Foreground="White"
-                                FontSize="12"
-                                FontFamily="Montserrat"
-                                Cursor="Hand"
-                                Margin="0,100,0,0"
-                                Click="btnAddFilm_Click">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background"
-                                            Value="#462AD8" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver"
-                                                 Value="True">
-                                            <Setter Property="Background"
-                                                    Value="#FF67D167" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Width="150"
-                                            Height="40"
-                                            CornerRadius="20"
-                                            Background="{TemplateBinding Background}">
-                                        <ContentPresenter VerticalAlignment="Center"
-                                                          HorizontalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>-->
 
                         <!-- Список фильмов -->
                         <ListView x:Name="filmsListView"

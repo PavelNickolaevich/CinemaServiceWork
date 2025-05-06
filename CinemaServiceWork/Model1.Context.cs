@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Data.Entity;
@@ -30,6 +30,7 @@ namespace CinemaServiceWork.ApplicationData
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Directors> Directors { get; set; }
         public virtual DbSet<Discussions> Discussions { get; set; }
+        public virtual DbSet<Favorites> Favorites { get; set; }
         public virtual DbSet<FilmPublishings> FilmPublishings { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
         public virtual DbSet<Movies> Movies { get; set; }
@@ -39,6 +40,5 @@ namespace CinemaServiceWork.ApplicationData
         public virtual DbSet<MoviesGenres> MoviesGenres { get; set; }
         public virtual DbSet<Studio> Studio { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Favorites> Favorites { get; set; }
     }
 }

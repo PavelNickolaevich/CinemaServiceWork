@@ -28,30 +28,28 @@ namespace CinemaServiceWork.Pages
 
         public FavoritePage(Users user)
         {
+ 
             InitializeComponent();
             _user = user;
             _films = new ObservableCollection<Movies>(AppConnect.cinemaEntities.Movies.ToList());
+            LoadFavoriteFilms();
         }
 
 
         private void LoadFavoriteFilms()
         {
-            // Очищаем текущую коллекцию
-           // _films.Clear();
+            _films.Clear();
 
-            // Получаем избранные фильмы для текущего пользователя
             var favoriteMovies = AppConnect.cinemaEntities.Favorites
                 .Where(f => f.UserID == _user.UserID)
                 .Select(f => f.Movies)
                 .ToList();
 
-            // Добавляем в коллекцию
             foreach (var movie in favoriteMovies)
             {
                 _films.Add(movie);
             }
 
-            // Привязываем коллекцию к ListBox (или другому контролу)
             filmsListView.ItemsSource = _films;
         }
 

@@ -7,35 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Actors
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public Actors()
         {
-            this.Comments = new HashSet<Comments>();
-            this.Discussions = new HashSet<Discussions>();
-            this.Favorites = new HashSet<Favorites>();
+            this.MoviesActors = new HashSet<MoviesActors>();
         }
     
-        public int UserID { get; set; }
+        public int ActorID { get; set; }
         public string First_name { get; set; }
         public string Last_name { get; set; }
-        public string Nickname { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public string Patronymic { get; set; }
         public Nullable<System.DateTime> Birth_of_date { get; set; }
-        public bool IsAdmin { get; set; }
+        public Nullable<int> CountryID { get; set; }
     
+        public virtual Countries Countries { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comments> Comments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Discussions> Discussions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Favorites> Favorites { get; set; }
+        public virtual ICollection<MoviesActors> MoviesActors { get; set; }
     }
 }

@@ -41,20 +41,25 @@ namespace CinemaServiceWork.Pages
 
         private void MyPageFilmsBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
+            //try
             {
                 AppFrame.contentFrame.Navigate(new MyFilmsPage(_user));
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Ошибка: {ex.Message}");
+            //}
         }
 
 
         private void FavoritesBtn_Click(object sender, RoutedEventArgs e)
         {
             AppFrame.contentFrame.Navigate(new FavoritePage(_user));
+        }
+
+        private void ForumBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.contentFrame.Navigate(new ForumPage(_user));
         }
 
         private void AddFilmBtn_Click(object sender, RoutedEventArgs e)

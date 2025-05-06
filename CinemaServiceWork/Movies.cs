@@ -7,36 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork.ApplicationData
+namespace CinemaServiceWork
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Movies
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Movies()
         {
-            this.FilmPublishings = new HashSet<FilmPublishings>();
             this.Favorites = new HashSet<Favorites>();
+            this.FilmPublishings = new HashSet<FilmPublishings>();
             this.MoviesActors = new HashSet<MoviesActors>();
             this.MoviesCountries = new HashSet<MoviesCountries>();
             this.MoviesDirectors = new HashSet<MoviesDirectors>();
             this.MoviesGenres = new HashSet<MoviesGenres>();
         }
-    
+
         public int MovieID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public Nullable<int> Release_year { get; set; }
         public Nullable<int> Duration { get; set; }
-        public Nullable<decimal> Rating { get; set; }
+        public Nullable<int> Rating { get; set; }
         public string Poster { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FilmPublishings> FilmPublishings { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Favorites> Favorites { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FilmPublishings> FilmPublishings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesActors> MoviesActors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -45,8 +45,9 @@ namespace CinemaServiceWork.ApplicationData
         public virtual ICollection<MoviesDirectors> MoviesDirectors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MoviesGenres> MoviesGenres { get; set; }
-        public string Genres { get; set; }
-        public string Directors { get; set; }
-        public string Actors { get; set; }
+
+        public string Genres { get; set;} 
+        public string Actors { get; set;} 
+        public string Directors { get; set;} 
     }
 }
