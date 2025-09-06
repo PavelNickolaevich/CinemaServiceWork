@@ -7,26 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork
+namespace CinemaServiceWork.ApplicationData
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class FilmPublishings
+    public partial class Actors
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FilmPublishings()
+        public Actors()
         {
-            this.Discussions = new HashSet<Discussions>();
+            this.MoviesActors = new HashSet<MoviesActors>();
         }
     
-        public int PublishID { get; set; }
-        public int MovieID { get; set; }
-        public string Status { get; set; }
-        public System.DateTime PublishDate { get; set; }
+        public int ActorID { get; set; }
+        public string First_name { get; set; }
+        public string Last_name { get; set; }
+        public string Patronymic { get; set; }
+        public Nullable<System.DateTime> Birth_of_date { get; set; }
+        public Nullable<int> CountryID { get; set; }
     
+        public virtual Countries Countries { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Discussions> Discussions { get; set; }
-        public virtual Movies Movies { get; set; }
+        public virtual ICollection<MoviesActors> MoviesActors { get; set; }
     }
 }

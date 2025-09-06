@@ -53,8 +53,6 @@ namespace CinemaServiceWork.Pages
         {
             InitializeComponent();
             LoadLists();
-          //  _context = new CinemaEntities();
-         //   _movie = _context.Movies.Find(movie.MovieID);
 
             foreach (var actor in listActors.Items)
             {

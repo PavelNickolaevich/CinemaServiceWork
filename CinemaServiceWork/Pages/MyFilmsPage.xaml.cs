@@ -285,6 +285,17 @@ namespace CinemaServiceWork.Pages
                         }
                     }
 
+
+                        if (ratingFilterComboBox.SelectedItem.ToString() != "Любой")
+                        {
+                            var rating = ratingFilterComboBox.SelectedItem.ToString().Split(' ');
+                            if (rating.Length == 3 && int.TryParse(rating[1], out int rate))
+                            {
+                                filteredFilms = filteredFilms.Where(f => f.Rating == rate);
+                            }
+                        }
+                   
+
                     filmsListView.ItemsSource = filteredFilms;
                     noFilmsText.Visibility = filteredFilms.Any() ? Visibility.Collapsed : Visibility.Visible;
                 }
@@ -806,56 +817,6 @@ namespace CinemaServiceWork.Pages
                               MessageBoxImage.Warning);
             }
         }
-
-
-        //private void PublishFilm_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (string.IsNullOrWhiteSpace(txtTitle.Text))
-        //    {
-        //        errorTxt.Visibility = Visibility.Visible;
-        //        errorTxt.Text = "Пожалуйста, заполните заголовок";
-        //        errorTxt.Foreground = Brushes.Red;
-
-        //        txtTitle.Focus();
-        //        return;
-        //    }
-
-        //    errorTxt.Visibility = Visibility.Collapsed;
-
-        //    var film = filmsListView.SelectedItem as Movies;
-
-        //    FilmPublishings filmPublishing = new FilmPublishings
-        //    {
-        //        MovieID = film.MovieID,
-        //        Status = "Published",
-        //        PublishDate = DateTime.Now
-        //    };
-
-        //    _context.FilmPublishings.Add(filmPublishing);
-        //    _context.SaveChanges();
-
-        //    Discussions discussion = new Discussions
-        //    {
-        //        PublishID = filmPublishing.PublishID,
-        //        UserID = _user.UserID,
-        //        Title = txtTitle.Text,
-        //        Message = txtMessage.Text
-        //    };
-
-        //    _context.Discussions.Add(discussion);
-        //    _context.SaveChanges();
-
-        //    PublishFilmPopup.IsOpen = false;
-        //    txtMessage.Text = "";
-        //    txtTitle.Text = "";
-
-        //    MessageBox.Show($"Фильм '{film.Title}' успешно опубликован!",
-        //                  "Успех",
-        //                  MessageBoxButton.OK,
-        //                  MessageBoxImage.Information);
-          
-
-        //}
 
         private void PublishFilm_Click(object sender, RoutedEventArgs e)
         {

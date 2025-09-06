@@ -146,7 +146,7 @@
                            Width="150"
                            Height="50" />
 
-                    <TextBlock Text="Username"
+                    <TextBlock Text="Никнейм"
                                Foreground="DarkGray"
                                FontSize="12"
                                FontWeight="Medium"
@@ -173,7 +173,7 @@
                         </TextBox.Background>
                     </TextBox>
 
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Пароль"
                                Foreground="DarkGray"
                                FontSize="12"
                                FontWeight="Medium"
@@ -202,7 +202,7 @@
 
                     <Button x:Name="btnLogin"
                             BorderThickness="0"
-                            Content="LOG IN"
+                            Content="Войти"
                             Foreground="White"
                             FontSize="12"
                             FontFamily="Montserrat"
@@ -238,7 +238,7 @@
 
                     <Button x:Name="btnRegistration"
                             BorderThickness="0"
-                            Content="REGISTRATION"
+                            Content="Регистрация"
                             Foreground="White"
                             FontSize="12"
                             FontFamily="Montserrat"

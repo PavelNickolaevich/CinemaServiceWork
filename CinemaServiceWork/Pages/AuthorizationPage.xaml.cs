@@ -94,7 +94,6 @@ namespace CinemaServiceWork.Pages
         }
 
 
-
         private void btnRegistration_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Pages.RegistrationPage());

@@ -7,18 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork
+namespace CinemaServiceWork.ApplicationData
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Favorites
+    public partial class MoviesActors
     {
-        public int FavoritID { get; set; }
-        public int UserID { get; set; }
-        public int MovieID { get; set; }
+        public int MoviesActorsID { get; set; }
+        public int MoviesID { get; set; }
+        public int ActorsID { get; set; }
     
+        public virtual Actors Actors { get; set; }
         public virtual Movies Movies { get; set; }
-        public virtual Users Users { get; set; }
     }
 }

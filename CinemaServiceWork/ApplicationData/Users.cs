@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork
+namespace CinemaServiceWork.ApplicationData
 {
     using System;
     using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace CinemaServiceWork
         public string Nickname { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public Nullable<System.DateTime> Birth_of_date { get; set; }
+        public System.DateTime Birth_of_date { get; set; }
         public bool IsAdmin { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

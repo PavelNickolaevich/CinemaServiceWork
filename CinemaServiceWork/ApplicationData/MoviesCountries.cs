@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork
+namespace CinemaServiceWork.ApplicationData
 {
     using System;
     using System.Collections.Generic;

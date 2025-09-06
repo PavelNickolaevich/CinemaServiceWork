@@ -7,33 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CinemaServiceWork
+namespace CinemaServiceWork.ApplicationData
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    public partial class Discussions
+    
+    public partial class Genres
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Discussions()
+        public Genres()
         {
-            this.Comments = new HashSet<Comments>();
+            this.MoviesGenres = new HashSet<MoviesGenres>();
         }
-
-        [Key]
-        public int DiscussionID { get; set; }
-        public int PublishID { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public string Title { get; set; }
-        public string Message { get; set; }
+    
+        public int GenreID { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comments> Comments { get; set; }
-        public virtual FilmPublishings FilmPublishings { get; set; }
-        public virtual Users Users { get; set; }
-
-        public int CommentCount { get; set; }
-        public int CurrentUserComCount { get; set; }
+        public virtual ICollection<MoviesGenres> MoviesGenres { get; set; }
     }
 }

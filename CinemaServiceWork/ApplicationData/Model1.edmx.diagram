@@ -4,27 +4,27 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3b7e299f6a774594ae74833d4a4753e2" Name="Diagram1">
+      <Diagram DiagramId="81234f16c4db4ea6a9f138ce33b236bd" Name="Diagram1" ZoomLevel="42">
         <EntityTypeShape EntityType="CinemaModel.Actors" Width="1.5" PointX="3.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.Comments" Width="1.5" PointX="7.5" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.Countries" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.Directors" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.Countries" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.Directors" Width="1.5" PointX="5.375" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.Discussions" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.Favorites" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.FilmPublishings" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.Genres" Width="1.5" PointX="5.75" PointY="20" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.Genres" Width="1.5" PointX="5.875" PointY="17.375" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.Movies" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.MoviesActors" Width="1.5" PointX="6" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.MoviesActors" Width="1.5" PointX="8.125" PointY="8.875" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.MoviesCountries" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.MoviesDirectors" Width="1.5" PointX="6" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.MoviesDirectors" Width="1.5" PointX="5.75" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.MoviesGenres" Width="1.5" PointX="8" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="CinemaModel.Studio" Width="1.5" PointX="3" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.Studio" Width="1.5" PointX="1.875" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.sysdiagrams" Width="1.5" PointX="7.875" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CinemaModel.Users" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
         <AssociationConnector Association="CinemaModel.FK_Actors_Country" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_MoviesActors_Actors" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_Comments_Discussions" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_Comments_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="CinemaModel.FK_Countries_Countries" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_Directors_Country" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_MoviesCountries_Countries" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_Studio_Countries" ManuallyRouted="false" />
@@ -34,7 +34,6 @@
         <AssociationConnector Association="CinemaModel.FK_Favorites_Movies" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_Favorites_Users" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_FilmPublishings_FilmPublishings" ManuallyRouted="false" />
-        <AssociationConnector Association="CinemaModel.FK_Genres_Genres" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_MoviesGenres_Genres" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_MoviesActors_Movies" ManuallyRouted="false" />
         <AssociationConnector Association="CinemaModel.FK_MoviesCountries_Movies" ManuallyRouted="false" />

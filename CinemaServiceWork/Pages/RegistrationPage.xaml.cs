@@ -38,6 +38,7 @@ namespace CinemaServiceWork.Pages
                    || String.IsNullOrEmpty(txtRptPassword.Password)
                    || String.IsNullOrWhiteSpace(txtRptPassword.Password)
                    || String.IsNullOrEmpty(txtPassword.Password)
+                   || !datePicker.SelectedDate.HasValue
                    || String.IsNullOrWhiteSpace(txtPassword.Password))
             {
                 MessageBox.Show(
@@ -56,8 +57,8 @@ namespace CinemaServiceWork.Pages
                     First_name = txtName.Text,
                     Last_name = txtSurname.Text,
                     Nickname = txtNickName.Text,
-                    Birth_of_date = datePicker.SelectedDate,
-                    Password = txtPassword.Password, // Исправлено: было txtEmail.Text
+                    Birth_of_date = (DateTime)datePicker.SelectedDate,
+                    Password = txtPassword.Password,
                     Email = txtEmail.Text
                 };
 
@@ -71,7 +72,7 @@ namespace CinemaServiceWork.Pages
                     MessageBoxImage.Information
                     );
 
-                AppFrame.contentFrame.Navigate(new AuthorizationPage());
+                AppFrame.mainFrame.GoBack();
 
             }
         }

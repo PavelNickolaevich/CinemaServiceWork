@@ -240,10 +240,15 @@ namespace CinemaServiceWork.Pages
 
                 сommentTextBox.Text = string.Empty;
 
-                discussionPopup.DataContext = _currentDiscussion;
-     
+                _currentDiscussion = _context.Discussions
+               .Include(d => d.Comments)
+               .Include(c => c.Users)
+               .FirstOrDefault(d => d.DiscussionID == _currentDiscussion.DiscussionID);
 
-                //    _currentDiscussion.CommentCount = _currentDiscussion.CommentCount;
+                _currentDiscussion.Comments = new ObservableCollection<Comments>(_currentDiscussion.Comments);
+
+                discussionPopup.DataContext = null;
+                discussionPopup.DataContext = _currentDiscussion;
 
                 ScrollToBottom();
             }
